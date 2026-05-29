@@ -58,10 +58,14 @@ export default function PedidosPage() {
   useEffect(() => {
     if (status === 'unauthenticated') { router.push('/login'); return; }
     if (status === 'authenticated') {
-      fetch('/api/orders').then((r) => r.json()).then((data) => {
-        setOrders(Array.isArray(data) ? data : []);
-        setLoading(false);
-      });
+      // Cancela PIX expirados antes de buscar
+      fetch('/api/orders/cleanup', { method: 'POST' })
+        .finally(() => {
+          fetch('/api/orders').then((r) => r.json()).then((data) => {
+            setOrders(Array.isArray(data) ? data : []);
+            setLoading(false);
+          });
+        });
     }
   }, [status, router]);
 
