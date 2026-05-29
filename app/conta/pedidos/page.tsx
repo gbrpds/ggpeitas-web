@@ -105,7 +105,7 @@ export default function PedidosPage() {
                       <div>
                         <p className="font-mono text-[13px] text-white/60">Pedido #{order.id.slice(-8).toUpperCase()}</p>
                         <p className="text-[11px] text-white/30">
-                          {new Date(order.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                          {new Date(order.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })} às {new Date(order.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
                     </div>

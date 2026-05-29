@@ -127,7 +127,7 @@ export default function AdminPedidosPage() {
                   <div>
                     <p className="text-[10px] text-white/30 uppercase tracking-wide mb-0.5">Pedido</p>
                     <p className="font-mono text-[#F5C400] font-bold">#{o.id.slice(-8).toUpperCase()}</p>
-                    <p className="text-[11px] text-white/30">{new Date(o.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                    <p className="text-[11px] text-white/30">{new Date(o.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })} · {new Date(o.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
                   </div>
                   <div>
                     <p className="text-[10px] text-white/30 uppercase tracking-wide mb-0.5">Cliente</p>
