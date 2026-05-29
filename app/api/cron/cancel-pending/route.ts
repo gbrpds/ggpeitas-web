@@ -10,16 +10,19 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
   }
 
-  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24h atrás
+  const cutoffPix = new Date(Date.now() - 35 * 60 * 1000);      // 35min para PIX
+  const cutoffCard = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24h para cartão
 
-  const result = await db.order.updateMany({
-    where: {
-      status: 'PENDING',
-      createdAt: { lt: cutoff },
-    },
+  const pixResult = await db.order.updateMany({
+    where: { status: 'PENDING', paymentMethod: 'PIX', createdAt: { lt: cutoffPix } },
     data: { status: 'CANCELLED' },
   });
 
-  console.log(`[CRON] ${result.count} pedidos pendentes cancelados.`);
-  return NextResponse.json({ cancelled: result.count });
+  const cardResult = await db.order.updateMany({
+    where: { status: 'PENDING', paymentMethod: 'CREDIT_CARD', createdAt: { lt: cutoffCard } },
+    data: { status: 'CANCELLED' },
+  });
+
+  console.log(`[CRON] PIX cancelados: ${pixResult.count} | Cartão cancelados: ${cardResult.count}`);
+  return NextResponse.json({ pixCancelled: pixResult.count, cardCancelled: cardResult.count });
 }
