@@ -5,6 +5,19 @@ export const authConfig = {
   trustHost: true,
   session: { strategy: 'jwt' },
   callbacks: {
+    // Mapeia role do JWT token para session.user
+    async session({ session, token }) {
+      if (token?.role) (session.user as { role?: string }).role = token.role as string;
+      if (token?.id) (session.user as { id?: string }).id = token.id as string;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = (user as { role?: string }).role;
+        token.id = user.id;
+      }
+      return token;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const role = (auth?.user as { role?: string })?.role;
