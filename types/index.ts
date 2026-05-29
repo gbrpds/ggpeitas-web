@@ -8,6 +8,7 @@ export interface Product {
   priceNum: number;
   icon: string;
   bg: string;
+  images?: string[];
   desc: string;
   filter: 'selecao' | 'clube';
   specs?: { key: string; val: string }[];

@@ -1,5 +1,7 @@
 'use client';
-import { X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useToast } from '@/components/ui/Toast';
 
@@ -8,8 +10,16 @@ const SIZES = ['P', 'M', 'G', 'GG', 'XGG'];
 export function ProductModal() {
   const { modalProduct, closeModal, selectedSize, setSelectedSize, addToCart } = useStore();
   const { show } = useToast();
+  const [activeImg, setActiveImg] = useState(0);
+
+  useEffect(() => {
+    setActiveImg(0);
+  }, [modalProduct?.id]);
 
   if (!modalProduct) return null;
+
+  const images = modalProduct.images ?? [];
+  const hasImages = images.length > 0;
 
   const pixPrice = ((modalProduct.priceNum * 0.9) / 100).toFixed(2).replace('.', ',');
 
@@ -20,12 +30,15 @@ export function ProductModal() {
     show(`✅ ${modalProduct.name} (${selectedSize}) adicionado!`);
   };
 
+  const prev = () => setActiveImg((i) => (i - 1 + images.length) % images.length);
+  const next = () => setActiveImg((i) => (i + 1) % images.length);
+
   return (
     <div
       className="fixed inset-0 z-[500] bg-black/88 backdrop-blur-xl flex items-center justify-center p-4"
       onClick={(e) => e.target === e.currentTarget && closeModal()}
     >
-      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[920px] max-h-[92vh] overflow-y-auto relative">
+      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[960px] max-h-[92vh] overflow-y-auto relative">
         <button
           onClick={closeModal}
           className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all"
@@ -35,12 +48,62 @@ export function ProductModal() {
 
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Gallery */}
-          <div
-            className="min-h-[260px] md:min-h-[420px] flex items-center justify-center text-[120px] border-b md:border-b-0 md:border-r border-white/[0.07] relative overflow-hidden"
-            style={{ background: modalProduct.bg }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-            <span className="relative z-10">{modalProduct.icon}</span>
+          <div className="flex flex-col border-b md:border-b-0 md:border-r border-white/[0.07]">
+            {/* Main image */}
+            <div
+              className="relative flex-1 min-h-[300px] md:min-h-[420px] flex items-center justify-center overflow-hidden"
+              style={hasImages ? {} : { background: modalProduct.bg }}
+            >
+              {hasImages ? (
+                <>
+                  <Image
+                    src={images[activeImg]}
+                    alt={`${modalProduct.name} - foto ${activeImg + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 480px"
+                  />
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prev}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all z-10"
+                      >
+                        <ChevronLeft size={18} />
+                      </button>
+                      <button
+                        onClick={next}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all z-10"
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+                  <span className="relative z-10 text-[120px]">{modalProduct.icon}</span>
+                </>
+              )}
+            </div>
+
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-2 p-3 border-t border-white/[0.07] overflow-x-auto">
+                {images.map((src, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImg(i)}
+                    className={`relative flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 transition-all ${
+                      i === activeImg ? 'border-[#F5C400]' : 'border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    <Image src={src} alt={`Miniatura ${i + 1}`} fill className="object-cover" sizes="64px" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details */}
