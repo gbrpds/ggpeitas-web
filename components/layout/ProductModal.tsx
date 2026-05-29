@@ -47,10 +47,10 @@ export function ProductModal() {
       className="fixed inset-0 z-[500] bg-black/88 backdrop-blur-xl flex items-center justify-center p-4"
       onClick={(e) => e.target === e.currentTarget && closeModal()}
     >
-      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[960px] max-h-[92vh] overflow-hidden relative">
+      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[960px] max-h-[92vh] overflow-y-auto md:overflow-hidden relative">
         <button
           onClick={closeModal}
-          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all"
+          className="sticky top-4 float-right mr-4 z-10 w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all"
         >
           <X size={16} />
         </button>
