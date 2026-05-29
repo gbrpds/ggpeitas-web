@@ -30,7 +30,7 @@ export const products: Product[] = [
     priceNum: 18990,
     icon: '⚫',
     bg: 'linear-gradient(135deg,#0a0f2e,#001a5e)',
-    images: ['/products/brasil-away-front.jpg', '/products/brasil-away-back.jpg'],
+    images: ['/products/brasil-away-foto1.png', '/products/brasil-away-foto2.png'],
     desc: 'A camisa alternativa da Seleção Brasileira para 2026. Design arrojado e moderno para representar o Brasil de um ângulo diferente.',
     filter: 'selecao',
     specs: [
