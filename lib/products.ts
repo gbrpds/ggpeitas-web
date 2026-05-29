@@ -167,6 +167,7 @@ export const products: Product[] = [
     priceNum: 18990,
     icon: '🇩🇪',
     bg: 'linear-gradient(135deg,#0a0a0a,#1a1a1a)',
+    images: ['/products/de-home-foto1.png', '/products/de-home-foto2.png', '/products/de-home-foto3.png'],
     desc: 'O clássico branco alemão de volta às grandes competições. Alemanha 2026 com o rigor e precisão que só a Mannschaft tem.',
     filter: 'selecao',
     specs: [

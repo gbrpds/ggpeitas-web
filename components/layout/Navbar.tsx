@@ -21,7 +21,7 @@ export function Navbar() {
   const links = [
     { href: '#loja', label: 'Loja' },
     { href: '#colecao', label: 'Coleção' },
-    { href: '#sobre', label: 'Sobre' },
+    { href: '/sobre', label: 'Sobre' },
     { href: '#contato', label: 'Contato' },
   ];
 

@@ -56,7 +56,7 @@ export function Footer() {
       <div className="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <p className="text-[11px] tracking-[1px] text-white/20">© 2026 <span className="text-[#008C3A]">GG Peitas</span> — Todos os direitos reservados.</p>
         <div className="flex gap-2">
-          {['🔒 SSL', '✓ Original', '⚡ Envio'].map((b) => (
+          {['🔒 SSL', '✓ Premium', '⚡ Envio'].map((b) => (
             <span key={b} className="bg-white/[0.04] border border-white/[0.07] px-3 py-1 rounded-sm text-[9px] tracking-[1.5px] uppercase text-white/40">{b}</span>
           ))}
         </div>
