@@ -3,8 +3,10 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { db } from './db';
+import { authConfig } from './auth.config';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       name: 'credentials',
@@ -30,7 +32,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.role = (user as { role?: string }).role;
       }
-      // Atualiza nome quando update() é chamado no cliente
       if (trigger === 'update' && session?.name) {
         token.name = session.name;
       }
@@ -43,7 +44,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-  pages: { signIn: '/login' },
-  session: { strategy: 'jwt' },
-  trustHost: true,
 });
