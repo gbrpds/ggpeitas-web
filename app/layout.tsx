@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: 'GG Peitas — Futebol, Estilo e Presença',
   description: 'Camisetas de futebol importadas premium. Modelo jogador. Brasil 2026, clubes europeus e seleções.',
   keywords: 'camiseta futebol, modelo jogador, brasil 2026, importada, premium',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: 'GG Peitas — Futebol, Estilo e Presença',
     description: 'Camisetas de futebol importadas premium. Modelo jogador.',
