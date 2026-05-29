@@ -32,6 +32,7 @@ const statusLabel: Record<string, string> = {
 export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [users, setUsers] = useState<{ id: string }[]>([]);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/admin/orders').then(r => r.json()).then(d => setOrders(Array.isArray(d) ? d : []));
@@ -45,14 +46,22 @@ export default function AdminPage() {
   const shipped = orders.filter(o => o.status === 'SHIPPED').length;
   const cancelled = orders.filter(o => o.status === 'CANCELLED').length;
 
-  const stats = [
-    { label: 'Total de Pedidos', value: orders.length, icon: <ShoppingBag size={20} />, color: 'text-[#F5C400]' },
-    { label: 'Receita Total', value: fmt(totalRevenue), sub: pendingRevenue > 0 ? `+ ${fmt(pendingRevenue)} pendente` : null, icon: <TrendingUp size={20} />, color: 'text-[#008C3A]' },
-    { label: 'Aguardando Pgto.', value: pending, icon: <Clock size={20} />, color: 'text-yellow-400' },
-    { label: 'Clientes', value: users.length, icon: <Users size={20} />, color: 'text-blue-400' },
-    { label: 'A Caminho', value: shipped, icon: <Truck size={20} />, color: 'text-purple-400' },
-    { label: 'Cancelados', value: cancelled, icon: <XCircle size={20} />, color: 'text-red-400' },
+  const stats: { label: string; value: string | number; icon: React.ReactNode; color: string; filter: string | null; sub?: string | null }[] = [
+    { label: 'Total de Pedidos',  value: orders.length,    icon: <ShoppingBag size={20} />, color: 'text-[#F5C400]',    filter: null },
+    { label: 'Receita Total',     value: fmt(totalRevenue),icon: <TrendingUp size={20} />,  color: 'text-[#008C3A]',    filter: null, sub: pendingRevenue > 0 ? `+ ${fmt(pendingRevenue)} pendente` : null },
+    { label: 'Aguardando Pgto.',  value: pending,          icon: <Clock size={20} />,       color: 'text-yellow-400',   filter: 'PENDING' },
+    { label: 'Clientes',          value: users.length,     icon: <Users size={20} />,       color: 'text-blue-400',     filter: null },
+    { label: 'A Caminho',         value: shipped,          icon: <Truck size={20} />,       color: 'text-purple-400',   filter: 'SHIPPED' },
+    { label: 'Cancelados',        value: cancelled,        icon: <XCircle size={20} />,     color: 'text-red-400',      filter: 'CANCELLED' },
   ];
+
+  const filteredOrders = activeFilter
+    ? orders.filter(o => o.status === activeFilter)
+    : orders;
+
+  const tableTitle = activeFilter
+    ? `${statusLabel[activeFilter]?.toUpperCase() ?? activeFilter} (${filteredOrders.length})`
+    : `ÚLTIMOS PEDIDOS`;
 
   return (
     <div className="min-h-screen bg-[#050505] pt-[68px] pb-16">
@@ -75,22 +84,42 @@ export default function AdminPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-10">
-          {stats.map((s) => (
-            <div key={s.label} className="bg-[#111] border border-white/[0.07] rounded-lg p-5">
-              <div className={`mb-3 ${s.color}`}>{s.icon}</div>
-              <div className={`font-display text-[28px] leading-none mb-1 ${s.color}`}>{s.value}</div>
-              <div className="text-[11px] text-white/40 tracking-wide">{s.label}</div>
-              {'sub' in s && s.sub && (
-                <div className="text-[11px] text-yellow-400 mt-1.5 font-semibold">{s.sub}</div>
-              )}
-            </div>
-          ))}
+          {stats.map((s) => {
+            const isActive = activeFilter === s.filter && s.filter !== null;
+            const isClickable = s.filter !== null;
+            return (
+              <div
+                key={s.label}
+                onClick={() => isClickable && setActiveFilter(activeFilter === s.filter ? null : s.filter)}
+                className={`bg-[#111] border rounded-lg p-5 transition-all ${
+                  isClickable ? 'cursor-pointer hover:border-white/20' : ''
+                } ${isActive ? 'border-white/30 ring-1 ring-white/20 scale-[1.03]' : 'border-white/[0.07]'}`}
+              >
+                <div className={`mb-3 ${s.color}`}>{s.icon}</div>
+                <div className={`font-display text-[28px] leading-none mb-1 ${s.color}`}>{s.value}</div>
+                <div className="text-[11px] text-white/40 tracking-wide">{s.label}</div>
+                {s.sub && <div className="text-[11px] text-yellow-400 mt-1.5 font-semibold">{s.sub}</div>}
+                {isClickable && (
+                  <div className={`text-[10px] mt-2 tracking-wide ${isActive ? 'text-white/60' : 'text-white/20'}`}>
+                    {isActive ? '✕ limpar filtro' : 'clique para filtrar'}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Últimos pedidos */}
+        {/* Tabela */}
         <div className="bg-[#111] border border-white/[0.07] rounded-lg overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
-            <h2 className="font-display text-[20px] tracking-[1px]">ÚLTIMOS PEDIDOS</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-[20px] tracking-[1px]">{tableTitle}</h2>
+              {activeFilter && (
+                <button onClick={() => setActiveFilter(null)} className="text-[11px] text-white/30 hover:text-white border border-white/10 px-2 py-0.5 rounded-sm transition-colors">
+                  limpar
+                </button>
+              )}
+            </div>
             <Link href="/admin/pedidos" className="text-[#F5C400] text-[12px] hover:text-white transition-colors">
               Ver todos →
             </Link>
@@ -109,7 +138,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.slice(0, 10).map((o) => (
+                {(activeFilter ? filteredOrders : filteredOrders.slice(0, 10)).map((o) => (
                   <tr key={o.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-4">
                       <Link href="/admin/pedidos" className="font-mono text-[#F5C400] hover:text-white transition-colors">
@@ -135,12 +164,12 @@ export default function AdminPage() {
                       </span>
                     </td>
                     <td className="px-4 py-4 text-white/40">
-                      {new Date(o.createdAt).toLocaleDateString('pt-BR')}
+                      {new Date(o.createdAt).toLocaleDateString('pt-BR')} · {new Date(o.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                     </td>
                   </tr>
                 ))}
-                {orders.length === 0 && (
-                  <tr><td colSpan={7} className="px-6 py-10 text-center text-white/30">Nenhum pedido ainda</td></tr>
+                {filteredOrders.length === 0 && (
+                  <tr><td colSpan={7} className="px-6 py-10 text-center text-white/30">Nenhum pedido encontrado</td></tr>
                 )}
               </tbody>
             </table>
