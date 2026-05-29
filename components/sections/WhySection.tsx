@@ -1,8 +1,8 @@
 const items = [
-  { icon: '🏆', title: 'Produto Original', desc: 'Trabalhamos apenas com importações originais. Cada peça com autenticidade garantida e nota fiscal.' },
+  { icon: '🏆', title: 'Produto Importado', desc: 'Trabalhamos apenas com importações premium. Cada peça com qualidade garantida.' },
   { icon: '👕', title: 'Modelo Jogador', desc: 'A versão usada em campo pelos atletas profissionais. Sem recortes de custo, sem versão torcedor.' },
   { icon: '⚡', title: 'Envio Rápido', desc: 'Pedidos processados em 24h. Envio via Correios ou transportadora com rastreamento em tempo real.' },
-  { icon: '💳', title: 'Pague Como Quiser', desc: 'PIX com desconto, cartão em até 12x, Mercado Pago e muito mais.' },
+  { icon: '💳', title: 'Formas de Pagamento', desc: 'PIX com desconto e cartão em até 12x (consulte as taxas).' },
   { icon: '🔒', title: 'Compra Segura', desc: 'Plataforma com criptografia SSL, dados protegidos e política de troca em até 7 dias.' },
   { icon: '💬', title: 'Suporte Ativo', desc: 'Atendimento via WhatsApp e Instagram. Respondemos em até 2h no horário comercial.' },
 ];

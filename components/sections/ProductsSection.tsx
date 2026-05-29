@@ -57,7 +57,7 @@ export function ProductsSection() {
           <div
             key={p.id}
             onClick={() => openModal(p)}
-            className="bg-[#161616] border border-white/[0.07] rounded cursor-pointer group hover:-translate-y-2 hover:border-[rgba(245,196,0,0.25)] hover:shadow-[0_24px_64px_rgba(0,0,0,0.6)] transition-all duration-300"
+            className="bg-[#161616] border border-white/[0.07] rounded cursor-pointer group hover:-translate-y-2 hover:border-[rgba(245,196,0,0.25)] hover:shadow-[0_24px_64px_rgba(0,0,0,0.6)] transition-all duration-300 flex flex-col"
           >
             {/* Image */}
             <div className="aspect-[4/5] relative overflow-hidden flex items-center justify-center" style={{ background: p.bg }}>
@@ -82,12 +82,12 @@ export function ProductsSection() {
             </div>
 
             {/* Info */}
-            <div className="p-4">
-              <p className="text-[9px] tracking-[2.5px] uppercase text-white/40 font-semibold">{p.cat}</p>
-              <p className="font-display text-[24px] tracking-wide mt-1 mb-3">
+            <div className="p-4 flex flex-col flex-1">
+              <p className="text-[9px] tracking-[2.5px] uppercase text-white/40 font-semibold min-h-[28px]">{p.cat}</p>
+              <p className="font-display text-[24px] tracking-wide mt-1 mb-3 min-h-[64px]">
                 {p.name} <span className="text-white/40 text-[16px]">{p.label}</span>
               </p>
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between mt-auto">
                 <div>
                   <p className="text-[9px] text-white/40 uppercase tracking-[1px]">a partir de</p>
                   <p className="text-[20px] font-bold text-[#F5C400]">{p.price}</p>

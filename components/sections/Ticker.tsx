@@ -1,5 +1,5 @@
 const items = [
-  'Brasil 2026', 'Modelo Jogador', 'Frete Grátis acima R$500',
+  'Brasil 2026', 'Modelo Jogador', 'Frete Grátis em toda loja',
   'Portugal 2026', 'Real Madrid', 'Barcelona',
   'Pix · Cartão · Parcelamento', 'GG Peitas Premium',
 ];

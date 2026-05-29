@@ -47,7 +47,7 @@ export function Footer() {
         <div>
           <h4 className="font-condensed text-[18px] font-bold tracking-[2px] uppercase text-[#F5C400] mb-5">Pagamentos</h4>
           <ul className="space-y-3">
-            {['PIX (10% OFF)', 'Cartão em até 12x', 'Mercado Pago', 'Boleto Bancário'].map((item) => (
+            {['PIX (10% OFF)', 'Cartão em até 12x (Consultar Taxas)'].map((item) => (
               <li key={item}><span className="text-white/40 text-[13px]">{item}</span></li>
             ))}
           </ul>

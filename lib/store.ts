@@ -8,6 +8,8 @@ interface Store {
   selectedSize: string | null;
   addToCart: (product: Product, size: string) => void;
   removeFromCart: (productId: number, size: string) => void;
+  updateQty: (productId: number, size: string, delta: number) => void;
+  clearCart: () => void;
   setCartOpen: (open: boolean) => void;
   openModal: (product: Product) => void;
   closeModal: () => void;
@@ -47,6 +49,20 @@ export const useStore = create<Store>((set, get) => ({
       ),
     }));
   },
+
+  updateQty: (productId, size, delta) => {
+    set((state) => ({
+      cart: state.cart
+        .map((c) =>
+          c.id === productId && c.size === size
+            ? { ...c, qty: c.qty + delta }
+            : c
+        )
+        .filter((c) => c.qty > 0),
+    }));
+  },
+
+  clearCart: () => set({ cart: [] }),
 
   setCartOpen: (open) => set({ cartOpen: open }),
   openModal: (product) => set({ modalProduct: product, selectedSize: null }),

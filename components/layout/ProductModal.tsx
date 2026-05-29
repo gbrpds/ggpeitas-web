@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useToast } from '@/components/ui/Toast';
@@ -10,6 +11,7 @@ const SIZES = ['P', 'M', 'G', 'GG', 'XGG'];
 export function ProductModal() {
   const { modalProduct, closeModal, selectedSize, setSelectedSize, addToCart } = useStore();
   const { show } = useToast();
+  const router = useRouter();
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
@@ -30,6 +32,13 @@ export function ProductModal() {
     show(`✅ ${modalProduct.name} (${selectedSize}) adicionado!`);
   };
 
+  const handleBuyNow = () => {
+    if (!selectedSize) { show('⚠️ Selecione um tamanho!'); return; }
+    addToCart(modalProduct, selectedSize);
+    closeModal();
+    router.push('/checkout');
+  };
+
   const prev = () => setActiveImg((i) => (i - 1 + images.length) % images.length);
   const next = () => setActiveImg((i) => (i + 1) % images.length);
 
@@ -38,7 +47,7 @@ export function ProductModal() {
       className="fixed inset-0 z-[500] bg-black/88 backdrop-blur-xl flex items-center justify-center p-4"
       onClick={(e) => e.target === e.currentTarget && closeModal()}
     >
-      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[960px] max-h-[92vh] overflow-y-auto relative">
+      <div className="bg-[#181818] border border-[rgba(245,196,0,0.2)] rounded-lg w-full max-w-[960px] max-h-[92vh] overflow-hidden relative">
         <button
           onClick={closeModal}
           className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-[#F5C400] hover:text-black transition-all"
@@ -46,12 +55,12 @@ export function ProductModal() {
           <X size={16} />
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:h-[92vh]">
           {/* Gallery */}
-          <div className="flex flex-col border-b md:border-b-0 md:border-r border-white/[0.07]">
-            {/* Main image */}
+          <div className="flex flex-col border-b md:border-b-0 md:border-r border-white/[0.07] md:overflow-y-auto">
+            {/* Main image — proporção 3:4 */}
             <div
-              className="relative flex-1 min-h-[300px] md:min-h-[420px] flex items-center justify-center overflow-hidden"
+              className="relative aspect-[3/4] w-full flex items-center justify-center overflow-hidden"
               style={hasImages ? {} : { background: modalProduct.bg }}
             >
               {hasImages ? (
@@ -107,7 +116,7 @@ export function ProductModal() {
           </div>
 
           {/* Details */}
-          <div className="p-8 md:p-10">
+          <div className="p-6 md:p-8 md:overflow-y-auto">
             <p className="text-[9px] font-bold tracking-[3px] uppercase text-[#F5C400] mb-3">
               Modelo Jogador · Oficial
             </p>
@@ -148,7 +157,7 @@ export function ProductModal() {
                 ADICIONAR AO CARRINHO
               </button>
               <button
-                onClick={handleAdd}
+                onClick={handleBuyNow}
                 className="w-full bg-[#008C3A] text-white py-4 font-display text-[22px] tracking-[2px] rounded-sm hover:bg-[#006B2D] transition-colors"
               >
                 COMPRAR AGORA
@@ -156,7 +165,7 @@ export function ProductModal() {
             </div>
 
             <div className="bg-[rgba(0,140,58,0.08)] border border-[rgba(0,140,58,0.2)] rounded-sm p-3 text-[11px] text-white/60 mb-5">
-              📦 Frete grátis acima de R$500 · Envio 24–48h · Rastreamento incluso
+              📦 Frete Grátis · Envio Rápido · Rastreamento Incluso
             </div>
 
             {modalProduct.specs && (

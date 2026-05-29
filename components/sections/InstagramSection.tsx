@@ -21,7 +21,7 @@ export function InstagramSection() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-9">
         <div>
           <p className="flex items-center gap-3 text-[10px] font-bold tracking-[4px] uppercase text-[#008C3A] mb-3">
-            <span className="w-5 h-px bg-[#008C3A]" /> Redes Sociais
+            <span className="w-5 h-px bg-[#008C3A]" /> Redes Sociais <span className="text-white/30 normal-case tracking-normal font-normal">(feedbacks)</span>
           </p>
           <h2 className="font-display leading-none tracking-[2px]" style={{ fontSize: 'clamp(40px,5.5vw,72px)' }}>
             @GGPEITAS

@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { CartSidebar } from '@/components/layout/CartSidebar';
 import { ProductModal } from '@/components/layout/ProductModal';
 import { Toast } from '@/components/ui/Toast';
+import { AuthSessionProvider } from '@/components/layout/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'GG Peitas — Futebol, Estilo e Presença',
@@ -27,12 +28,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <CartSidebar />
-        <ProductModal />
-        <Toast />
+        <AuthSessionProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <CartSidebar />
+          <ProductModal />
+          <Toast />
+        </AuthSessionProvider>
       </body>
     </html>
   );
