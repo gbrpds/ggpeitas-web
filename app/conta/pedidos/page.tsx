@@ -145,11 +145,10 @@ export default function PedidosPage() {
                     </div>
 
                     {/* Botão retomar pagamento */}
-                    {order.status === 'PENDING' && (() => {
-                      const age = Date.now() - new Date(order.createdAt).getTime();
-                      const limit = order.paymentMethod === 'PIX' ? 30 * 60 * 1000 : 24 * 60 * 60 * 1000;
-                      return age < limit;
-                    })() && (
+                    {order.status === 'PENDING' && (
+                      Date.now() - new Date(order.createdAt).getTime() <
+                      (order.paymentMethod === 'PIX' ? 30 * 60 * 1000 : 24 * 60 * 60 * 1000)
+                    ) && (
                       <div className="mt-4 pt-4 border-t border-white/[0.07]">
                         <button
                           onClick={() => resumePayment(order)}
