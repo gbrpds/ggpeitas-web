@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { products } from '@/lib/products';
 import { useStore } from '@/lib/store';
 
@@ -60,7 +61,17 @@ export function ProductsSection() {
           >
             {/* Image */}
             <div className="aspect-[4/5] relative overflow-hidden flex items-center justify-center" style={{ background: p.bg }}>
-              <span className="text-[96px] group-hover:scale-105 transition-transform duration-500">{p.icon}</span>
+              {p.images?.[0] ? (
+                <Image
+                  src={p.images[0]}
+                  alt={p.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+              ) : (
+                <span className="text-[96px] group-hover:scale-105 transition-transform duration-500">{p.icon}</span>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className={`absolute top-3 left-3 text-[8px] font-extrabold tracking-[2px] uppercase px-2.5 py-1 rounded-sm ${badgeMap[p.badge]}`}>
                 {badgeLabel[p.badge]}

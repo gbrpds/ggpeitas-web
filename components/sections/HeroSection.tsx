@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useStore } from '@/lib/store';
 import { products } from '@/lib/products';
 
+
 export function HeroSection() {
   const { openModal } = useStore();
 
@@ -34,7 +35,7 @@ export function HeroSection() {
         </div>
 
         {/* Title */}
-        <div className="font-display leading-[0.88] tracking-[2px] mb-2" style={{ fontSize: 'clamp(72px,11vw,130px)' }}>
+        <div className="font-display leading-[0.9] tracking-[2px] mb-6" style={{ fontSize: 'clamp(56px,8vw,110px)' }}>
           <div className="text-white">FUTEBOL</div>
           <div className="text-[#F5C400]" style={{ textShadow: '0 0 60px rgba(245,196,0,0.3)' }}>ESTILO</div>
           <div className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.18)' }}>PRESENÇA</div>
@@ -86,10 +87,20 @@ export function HeroSection() {
               style={{ background: color }}>
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent" />
               <div className="absolute font-display text-[120px] text-white/[0.04] bottom-[-10px] right-[-10px] leading-none select-none">10</div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                <span className="text-[64px]">{p.icon}</span>
-                <span className="font-display text-[22px] tracking-[4px] text-white/60">2026</span>
-              </div>
+              {p.images?.[0] ? (
+                <Image
+                  src={p.images[0]}
+                  alt={p.name}
+                  fill
+                  className="object-cover"
+                  sizes="280px"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                  <span className="text-[64px]">{p.icon}</span>
+                  <span className="font-display text-[22px] tracking-[4px] text-white/60">2026</span>
+                </div>
+              )}
               <span className={`absolute top-3 left-3 ${badgeColor} text-[8px] font-extrabold tracking-[2px] uppercase px-2.5 py-1 rounded-sm`}>
                 {badge}
               </span>
