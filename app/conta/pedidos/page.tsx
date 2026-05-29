@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Package, QrCode, CreditCard, ExternalLink, ChevronLeft, Truck, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
+import { Package, QrCode, CreditCard, ExternalLink, ChevronLeft, Truck, CheckCircle, Clock, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 
 const fmt = (n: number) => `R$ ${(n / 100).toFixed(2).replace('.', ',')}`;
 
@@ -34,6 +34,26 @@ export default function PedidosPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [resuming, setResuming] = useState<string | null>(null);
+
+  const resumePayment = async (order: Order) => {
+    setResuming(order.id);
+    if (order.paymentMethod === 'PIX') {
+      router.push(`/checkout/pix?orderId=${order.id}`);
+      return;
+    }
+    // Cartão → recria preferência no MP
+    const res = await fetch('/api/checkout/mp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: order.id, paymentMethod: 'CREDIT_CARD' }),
+    });
+    const data = await res.json();
+    setResuming(null);
+    if (res.ok && data.initPoint) {
+      window.location.href = data.initPoint;
+    }
+  };
 
   useEffect(() => {
     if (status === 'unauthenticated') { router.push('/login'); return; }
@@ -123,6 +143,23 @@ export default function PedidosPage() {
                         }
                       </p>
                     </div>
+
+                    {/* Botão retomar pagamento */}
+                    {order.status === 'PENDING' && (
+                      <div className="mt-4 pt-4 border-t border-white/[0.07]">
+                        <button
+                          onClick={() => resumePayment(order)}
+                          disabled={resuming === order.id}
+                          className="w-full flex items-center justify-center gap-2 bg-[#F5C400] text-black py-3 font-display text-[16px] tracking-[2px] rounded-sm hover:bg-[#D9A300] transition-colors disabled:opacity-60"
+                        >
+                          <RefreshCw size={16} className={resuming === order.id ? 'animate-spin' : ''} />
+                          {resuming === order.id ? 'AGUARDE...' : order.paymentMethod === 'PIX' ? 'RETOMAR PIX' : 'RETOMAR PAGAMENTO'}
+                        </button>
+                        <p className="text-center text-[11px] text-white/25 mt-2">
+                          Pedido aguardando pagamento — clique para continuar
+                        </p>
+                      </div>
+                    )}
 
                     {/* Rastreamento */}
                     {order.trackingCode && (
