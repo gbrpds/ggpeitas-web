@@ -65,7 +65,7 @@ export function ShippingSection() {
               <span className="w-5 h-px bg-[#F5C400]" /> Experiência de entrega
             </p>
             <h2 className="font-display leading-none tracking-[2px]" style={{ fontSize: 'clamp(36px,5vw,64px)' }}>
-              DO NOSSO ESTOQUE<br />
+              DO NOSSO ESTOQUEE<br />
               <span className="text-[#F5C400]">ATÉ A SUA PORTA</span>
             </h2>
           </div>
