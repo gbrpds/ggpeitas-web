@@ -43,6 +43,7 @@ export default function AdminPage() {
   const pendingRevenue = orders.filter(o => o.status === 'PENDING').reduce((s, o) => s + o.total, 0);
   const pending = orders.filter(o => o.status === 'PENDING').length;
   const shipped = orders.filter(o => o.status === 'SHIPPED').length;
+  const cancelled = orders.filter(o => o.status === 'CANCELLED').length;
 
   const stats = [
     { label: 'Total de Pedidos', value: orders.length, icon: <ShoppingBag size={20} />, color: 'text-[#F5C400]' },
@@ -50,6 +51,7 @@ export default function AdminPage() {
     { label: 'Aguardando Pgto.', value: pending, icon: <Clock size={20} />, color: 'text-yellow-400' },
     { label: 'Clientes', value: users.length, icon: <Users size={20} />, color: 'text-blue-400' },
     { label: 'A Caminho', value: shipped, icon: <Truck size={20} />, color: 'text-purple-400' },
+    { label: 'Cancelados', value: cancelled, icon: <XCircle size={20} />, color: 'text-red-400' },
   ];
 
   return (
@@ -72,7 +74,7 @@ export default function AdminPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-10">
           {stats.map((s) => (
             <div key={s.label} className="bg-[#111] border border-white/[0.07] rounded-lg p-5">
               <div className={`mb-3 ${s.color}`}>{s.icon}</div>

@@ -58,8 +58,8 @@ export default function PedidosPage() {
   useEffect(() => {
     if (status === 'unauthenticated') { router.push('/login'); return; }
     if (status === 'authenticated') {
-      // Cancela PIX expirados antes de buscar
       fetch('/api/orders/cleanup', { method: 'POST' })
+        .catch(() => {})
         .finally(() => {
           fetch('/api/orders').then((r) => r.json()).then((data) => {
             setOrders(Array.isArray(data) ? data : []);
@@ -95,7 +95,12 @@ export default function PedidosPage() {
         ) : (
           <div className="flex flex-col gap-4">
             {orders.map((order) => {
-              const cfg = statusConfig[order.status];
+              // PIX pendente há mais de 35min → mostra como cancelado
+              const isPixExpired = order.status === 'PENDING'
+                && order.paymentMethod === 'PIX'
+                && Date.now() - new Date(order.createdAt).getTime() > 35 * 60 * 1000;
+              const displayStatus: OrderStatus = isPixExpired ? 'CANCELLED' : order.status;
+              const cfg = statusConfig[displayStatus];
               const Icon = cfg.icon;
               return (
                 <div key={order.id} className="bg-[#111] border border-white/[0.07] rounded-lg overflow-hidden">
