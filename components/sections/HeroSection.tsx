@@ -29,10 +29,10 @@ export function HeroSection() {
       </div>
 
       {/* Layout grid */}
-      <div className="relative z-10 w-full h-full grid grid-cols-1 lg:grid-cols-2">
+      <div className="relative z-10 w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
 
         {/* ── ESQUERDA: slogan + botões ── */}
-        <div className="flex flex-col justify-center px-[5%] pl-[5%] lg:pl-[8%] xl:pl-[12%] py-8 animate-fade-up">
+        <div className="flex flex-col justify-center px-[5%] pl-[5%] lg:pl-[8%] xl:pl-[10%] animate-fade-up">
           {/* Badge */}
           <div className="inline-flex items-center gap-3 bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.25)] px-4 py-1.5 rounded-sm mb-4 w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-[#F5C400] animate-pulse" />
@@ -79,42 +79,42 @@ export function HeroSection() {
         </div>
 
         {/* ── DIREITA: timer + cards ── */}
-        <div className="hidden lg:flex flex-col justify-center pr-[4%] py-6 gap-4">
+        <div className="hidden lg:flex flex-col px-4 pr-[4%] pt-4 pb-0 gap-3 h-full">
 
           {/* Banner oferta */}
           {!timer.expired && (
-            <div className="flex items-center justify-between bg-[rgba(0,0,0,0.6)] backdrop-blur-sm border border-[rgba(245,196,0,0.25)] rounded-xl px-5 py-3">
+            <div className="flex items-center justify-between bg-[rgba(0,0,0,0.7)] backdrop-blur-sm border border-[rgba(245,196,0,0.25)] rounded-xl px-4 py-2.5 flex-shrink-0">
               <div className="flex items-center gap-2">
-                <Flame size={16} className="text-[#F5C400] animate-pulse" />
+                <Flame size={14} className="text-[#F5C400] animate-pulse flex-shrink-0" />
                 <div>
-                  <p className="text-[10px] font-bold tracking-[2px] uppercase text-[#F5C400]">Oferta por tempo limitado</p>
-                  <p className="text-[11px] text-white/40 mt-0.5">
+                  <p className="text-[9px] font-bold tracking-[2px] uppercase text-[#F5C400]">Oferta por tempo limitado</p>
+                  <p className="text-[10px] text-white/40">
                     DE <span className="line-through text-white/30">R$ 229,90</span>
-                    <span className="text-white/60 mx-1.5">→</span>
+                    <span className="text-white/40 mx-1">→</span>
                     POR <span className="text-[#F5C400] font-bold">R$ 189,90</span>
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 font-mono text-[13px] font-bold">
+              <div className="flex items-center gap-1 font-mono font-bold flex-shrink-0">
                 {[timer.h, timer.m, timer.s].map((val, i) => (
                   <span key={i} className="flex items-center gap-1">
-                    <span className="bg-[#F5C400] text-black px-2 py-1 rounded-sm min-w-[34px] text-center text-[14px]">{val}</span>
-                    {i < 2 && <span className="text-[#F5C400]">:</span>}
+                    <span className="bg-[#F5C400] text-black px-2 py-0.5 rounded-sm min-w-[30px] text-center text-[13px]">{val}</span>
+                    {i < 2 && <span className="text-[#F5C400] text-[12px]">:</span>}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Cards */}
-          <div className="flex gap-4 items-end">
+          {/* Cards — crescem para preencher o espaço restante */}
+          <div className="flex gap-3 flex-1 min-h-0">
             {[
               { p: products[0], color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
               { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
             ].map(({ p, color, badge, badgeColor }) => (
-              <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(0,0,0,0.6)]">
-                {/* Imagem */}
-                <div className="aspect-[3/4] relative overflow-hidden" style={{ background: color }}>
+              <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-t-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-1 flex flex-col">
+                {/* Imagem — cresce */}
+                <div className="flex-1 relative overflow-hidden min-h-0" style={{ background: color }}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
                   {p.images && p.images[0] ? (
                     <Image src={p.images[0]} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="320px" />
@@ -129,15 +129,15 @@ export function HeroSection() {
                   <div className="absolute bottom-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">-17%</div>
                 </div>
                 {/* Info */}
-                <div className="bg-[#0f0f0f] p-4 border-t-2 border-[#F5C400]">
-                  <div className="text-[9px] tracking-[2.5px] uppercase text-[#F5C400] font-bold mb-1">Modelo Jogador</div>
-                  <div className="font-display text-[18px] tracking-[1px] leading-tight">{p.name}<br/><span className="text-white/50 text-[14px]">{p.label}</span></div>
-                  <div className="flex items-center justify-between mt-3">
+                <div className="bg-[#0f0f0f] px-4 py-3 border-t-2 border-[#F5C400] flex-shrink-0">
+                  <div className="text-[9px] tracking-[2px] uppercase text-[#F5C400] font-bold mb-0.5">Modelo Jogador</div>
+                  <div className="font-display text-[16px] tracking-[1px] leading-tight text-white">{p.name} <span className="text-white/40 text-[13px]">{p.label}</span></div>
+                  <div className="flex items-center justify-between mt-2">
                     <div>
-                      <div className="text-[10px] text-white/30 line-through">R$ 229,90</div>
-                      <div className="text-[18px] font-bold text-[#F5C400]">{p.price}</div>
+                      <div className="text-[9px] text-white/30 line-through">R$ 229,90</div>
+                      <div className="text-[16px] font-bold text-[#F5C400]">{p.price}</div>
                     </div>
-                    <button className="bg-[#F5C400] text-black text-[10px] font-bold tracking-[2px] uppercase px-4 py-2 rounded-sm hover:bg-[#D9A300] transition-colors">
+                    <button className="bg-[#F5C400] text-black text-[9px] font-bold tracking-[2px] uppercase px-3 py-1.5 rounded-sm hover:bg-[#D9A300] transition-colors">
                       VER
                     </button>
                   </div>
