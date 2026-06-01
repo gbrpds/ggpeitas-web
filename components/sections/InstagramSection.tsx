@@ -17,7 +17,7 @@ const cells = [
 
 export function InstagramSection() {
   return (
-    <section className="bg-[#111] py-24 px-[5%]">
+    <section className="bg-[#111] pt-10 pb-24 px-[5%]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-9">
         <div>
           <p className="flex items-center gap-3 text-[10px] font-bold tracking-[4px] uppercase text-[#008C3A] mb-3">

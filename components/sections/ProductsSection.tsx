@@ -11,7 +11,7 @@ export function ProductsSection() {
   const timer = useOfferTimer(); // usado só para mostrar preço riscado
 
   return (
-    <section id="loja" className="bg-[#111] pt-16 pb-12 px-[5%]">
+    <section id="loja" className="bg-[#111] pt-16 pb-4 px-[5%]">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
