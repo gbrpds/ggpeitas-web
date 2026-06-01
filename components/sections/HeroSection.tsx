@@ -2,13 +2,16 @@
 import Image from 'next/image';
 import { useStore } from '@/lib/store';
 import { products } from '@/lib/products';
+import { useOfferTimer } from '@/lib/useOfferTimer';
+import { Flame } from 'lucide-react';
 
 export function HeroSection() {
   const { openModal } = useStore();
+  const timer = useOfferTimer();
 
   return (
     <section id="home" className="h-[88vh] relative flex items-start pt-[68px]">
-      {/* BG layers — overflow-hidden isolado para não cortar o conteúdo */}
+      {/* BG layers */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-radial-[ellipse_at_30%_50%] from-[rgba(0,50,20,0.6)] to-[#050505]" />
         <div
@@ -27,6 +30,22 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 px-[5%] pl-[5%] lg:pl-[8%] xl:pl-[12%] pt-6 pb-2 max-w-[600px] animate-fade-up">
+
+        {/* Timer de oferta */}
+        {!timer.expired && (
+          <div className="inline-flex items-center gap-2.5 bg-red-500/10 border border-red-500/30 px-3 py-1.5 rounded-sm mb-3">
+            <Flame size={13} className="text-red-400 animate-pulse" />
+            <span className="text-[10px] font-bold tracking-[2px] uppercase text-red-400">Oferta termina em</span>
+            <div className="flex items-center gap-0.5 font-mono text-[12px] font-bold">
+              <span className="bg-red-500/20 px-1.5 py-0.5 rounded text-red-300">{timer.h}</span>
+              <span className="text-red-400">:</span>
+              <span className="bg-red-500/20 px-1.5 py-0.5 rounded text-red-300">{timer.m}</span>
+              <span className="text-red-400">:</span>
+              <span className="bg-red-500/20 px-1.5 py-0.5 rounded text-red-300">{timer.s}</span>
+            </div>
+          </div>
+        )}
+
         {/* Badge */}
         <div className="inline-flex items-center gap-3 bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.25)] px-4 py-1.5 rounded-sm mb-3">
           <span className="w-1.5 h-1.5 rounded-full bg-[#F5C400] animate-pulse" />
@@ -48,6 +67,20 @@ export function HeroSection() {
           Futebol, estilo e presença.
         </div>
 
+        {/* Preço DE / POR */}
+        {!timer.expired && (
+          <div className="flex items-center gap-3 mb-3">
+            <div className="text-[12px] text-white/40">
+              DE <span className="line-through text-white/30">R$ 229,90</span>
+            </div>
+            <div className="w-px h-4 bg-white/20" />
+            <div className="text-[14px] font-bold text-[#F5C400]">
+              POR R$ 189,90
+            </div>
+            <div className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">-17%</div>
+          </div>
+        )}
+
         {/* CTAs */}
         <div className="flex gap-3 mb-4">
           <a href="#loja" className="flex-1 text-center bg-[#F5C400] text-black py-3 font-display text-[17px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all">
@@ -61,7 +94,7 @@ export function HeroSection() {
           </button>
         </div>
 
-        {/* Stats — inline no fluxo */}
+        {/* Stats */}
         <div className="hidden md:flex gap-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
           {[['Qualidade', 'Premium'], ['10+', 'Seleções'], ['Frete', 'Grátis']].map(([n, l]) => (
             <div key={l}>
@@ -73,29 +106,16 @@ export function HeroSection() {
       </div>
 
       {/* Kit cards */}
-      <div className="absolute right-0 bottom-0 top-[68px] w-[50%] hidden lg:flex items-start justify-center pt-6 z-[1]" style={{ animationDelay: '0.15s' }}>
+      <div className="absolute right-0 bottom-0 top-[68px] w-[50%] hidden lg:flex items-start justify-center pt-6 z-[1]">
         {[
-          { p: products[0], mt: 0, color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
-          { p: products[1], mt: 0, color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
-        ].map(({ p, mt, color, badge, badgeColor }) => (
-          <div
-            key={p.id}
-            onClick={() => openModal(p)}
-            className="flex-1 max-w-[280px] cursor-pointer group"
-            style={{ marginTop: mt, alignSelf: 'center' }}
-          >
-            <div className="aspect-[3/4] rounded-t-md overflow-hidden relative transition-transform duration-500 group-hover:-translate-y-6"
-              style={{ background: color }}>
+          { p: products[0], color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
+          { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
+        ].map(({ p, color, badge, badgeColor }) => (
+          <div key={p.id} onClick={() => openModal(p)} className="flex-1 max-w-[280px] cursor-pointer group" style={{ alignSelf: 'center' }}>
+            <div className="aspect-[3/4] rounded-t-md overflow-hidden relative transition-transform duration-500 group-hover:-translate-y-6" style={{ background: color }}>
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent" />
-              <div className="absolute font-display text-[120px] text-white/[0.04] bottom-[-10px] right-[-10px] leading-none select-none">10</div>
               {p.images && p.images[0] ? (
-                <Image
-                  src={p.images[0]}
-                  alt={p.name}
-                  fill
-                  className="object-cover"
-                  sizes="280px"
-                />
+                <Image src={p.images[0]} alt={p.name} fill className="object-cover" sizes="280px" />
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                   <span className="text-[64px]">{p.icon}</span>
@@ -108,11 +128,11 @@ export function HeroSection() {
             </div>
             <div className="bg-black/[0.98] p-3.5 border-t-2 border-[#F5C400]">
               <div className="text-[9px] tracking-[2.5px] uppercase text-[#F5C400] font-bold">Modelo Jogador</div>
-              <div className="font-display text-[22px] tracking-[1px] my-0.5">{p.name} {p.label}</div>
+              <div className="font-display text-[20px] tracking-[1px] my-0.5">{p.name} {p.label}</div>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-white/40">a partir de</div>
-                  <div className="text-[16px] font-bold">{p.price}</div>
+                  <div className="text-[9px] text-white/30 line-through">R$ 229,90</div>
+                  <div className="text-[15px] font-bold text-[#F5C400]">{p.price}</div>
                 </div>
                 <button className="bg-[#008C3A] text-white text-[9px] font-bold tracking-[2px] uppercase px-3 py-1.5 rounded-sm hover:bg-[#006B2D] transition-colors">
                   VER

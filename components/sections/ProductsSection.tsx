@@ -1,52 +1,18 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { products } from '@/lib/products';
 import { useStore } from '@/lib/store';
-import { Clock, Flame, ChevronRight } from 'lucide-react';
-
-const OFFER_DURATION = 80 * 60; // 1h20min em segundos
-
-function useOfferTimer() {
-  const [timeLeft, setTimeLeft] = useState(OFFER_DURATION);
-
-  useEffect(() => {
-    const key = 'ggpeitas_offer_expiry';
-    const stored = localStorage.getItem(key);
-    let expiry: number;
-
-    if (stored) {
-      expiry = parseInt(stored);
-    } else {
-      expiry = Date.now() + OFFER_DURATION * 1000;
-      localStorage.setItem(key, String(expiry));
-    }
-
-    const tick = () => {
-      const left = Math.max(0, Math.floor((expiry - Date.now()) / 1000));
-      setTimeLeft(left);
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const h = Math.floor(timeLeft / 3600);
-  const m = Math.floor((timeLeft % 3600) / 60);
-  const s = timeLeft % 60;
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return { h: pad(h), m: pad(m), s: pad(s), expired: timeLeft === 0 };
-}
+import { useOfferTimer } from '@/lib/useOfferTimer';
+import { ChevronRight } from 'lucide-react';
 
 const activeProducts = products.filter(p => p.active !== false && (p.id === 0 || p.id === 1));
-const comingSoonFlags = ['🇦🇷', '🇵🇹', '🇩🇪', '🇫🇷', '🇪🇸', '🇧🇪', '🏴󠁧󠁢󠁥󠁮󠁧󠁿', '🇨🇴', '⚪', '🔵', '🔴', '🔷'];
 
 export function ProductsSection() {
   const { openModal } = useStore();
-  const timer = useOfferTimer();
+  const timer = useOfferTimer(); // usado só para mostrar preço riscado
 
   return (
-    <section id="loja" className="bg-[#111] py-24 px-[5%]">
+    <section id="loja" className="bg-[#111] pt-16 pb-12 px-[5%]">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
@@ -62,28 +28,6 @@ export function ProductsSection() {
           </div>
         </div>
 
-        {/* Timer de oferta */}
-        {!timer.expired && (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-[rgba(245,196,0,0.06)] border border-[rgba(245,196,0,0.2)] rounded-xl px-5 py-4 mb-10">
-            <div className="flex items-center gap-2">
-              <Flame size={18} className="text-[#F5C400] animate-pulse" />
-              <span className="text-[12px] font-bold tracking-[1px] uppercase text-[#F5C400]">Oferta por tempo limitado</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock size={14} className="text-white/40" />
-              <span className="text-white/50 text-[12px]">Termina em:</span>
-              <div className="flex items-center gap-1 font-mono">
-                {[timer.h, timer.m, timer.s].map((val, i) => (
-                  <span key={i} className="flex items-center gap-1">
-                    <span className="bg-[#F5C400] text-black font-bold text-[14px] px-2 py-0.5 rounded-sm min-w-[32px] text-center">{val}</span>
-                    {i < 2 && <span className="text-[#F5C400] font-bold">:</span>}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <span className="sm:ml-auto text-[11px] text-white/30">De <span className="line-through">R$ 229,90</span> por <span className="text-[#F5C400] font-bold">R$ 189,90</span></span>
-          </div>
-        )}
 
         {/* Cards das camisetas do Brasil — grade grande */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
@@ -153,17 +97,10 @@ export function ProductsSection() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            {comingSoonFlags.map((flag, i) => (
-              <div key={i} className="w-14 h-14 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-[28px] opacity-40 cursor-not-allowed">
-                {flag}
-              </div>
-            ))}
-            <div className="w-14 h-14 rounded-xl bg-white/[0.03] border border-dashed border-white/10 flex items-center justify-center text-white/20 cursor-not-allowed">
-              <span className="text-[20px]">+</span>
-            </div>
+          <div className="flex flex-col gap-2 text-white/25 text-[13px]">
+            <p className="flex items-center gap-2"><ChevronRight size={13} className="text-white/20" /> Argentina · Portugal · Alemanha · França · Espanha · Bélgica · Inglaterra · Colômbia</p>
+            <p className="flex items-center gap-2"><ChevronRight size={13} className="text-white/20" /> Real Madrid · Barcelona · PSG · Manchester City e muito mais</p>
           </div>
-
           <p className="text-white/20 text-[12px] mt-4 flex items-center gap-1.5">
             <ChevronRight size={12} /> Acompanhe nossas redes sociais para ser o primeiro a saber dos lançamentos
           </p>
