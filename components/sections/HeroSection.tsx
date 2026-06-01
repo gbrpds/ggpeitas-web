@@ -79,7 +79,7 @@ export function HeroSection() {
         </div>
 
         {/* ── DIREITA: timer + cards ── */}
-        <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-3 h-full max-w-[560px] ml-auto">
+        <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-3 h-full">
 
           {/* Banner oferta */}
           {!timer.expired && (
@@ -113,8 +113,8 @@ export function HeroSection() {
               { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
             ].map(({ p, color, badge, badgeColor }) => (
               <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-1">
-                {/* Imagem com aspect ratio fixo */}
-                <div className="aspect-[3/4] relative overflow-hidden" style={{ background: color }}>
+                {/* Imagem com altura máxima */}
+                <div className="relative overflow-hidden" style={{ background: color, height: 'min(55vh, 420px)' }}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
                   {p.images && p.images[0] ? (
                     <Image src={p.images[0]} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="320px" />
