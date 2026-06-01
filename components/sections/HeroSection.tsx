@@ -81,20 +81,26 @@ export function HeroSection() {
         {/* ── DIREITA: timer + cards ── */}
         <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-3 h-full">
 
-          {/* Banner oferta */}
-          {!timer.expired && (
-            <div className="flex items-center justify-between bg-[rgba(0,0,0,0.7)] backdrop-blur-sm border border-[rgba(245,196,0,0.25)] rounded-xl px-4 py-2.5 flex-shrink-0">
-              <div className="flex items-center gap-2">
-                <Flame size={14} className="text-[#F5C400] animate-pulse flex-shrink-0" />
-                <div>
-                  <p className="text-[9px] font-bold tracking-[2px] uppercase text-[#F5C400]">Oferta por tempo limitado</p>
-                  <p className="text-[10px] text-white/40">
-                    DE <span className="line-through text-white/30">R$ 229,90</span>
-                    <span className="text-white/40 mx-1">→</span>
-                    POR <span className="text-[#F5C400] font-bold">R$ 189,90</span>
-                  </p>
-                </div>
+          {/* Banner oferta — sempre visível */}
+          <div className={`flex items-center justify-between backdrop-blur-sm border rounded-xl px-4 py-2.5 flex-shrink-0 ${
+            timer.expired
+              ? 'bg-white/[0.03] border-white/10'
+              : 'bg-[rgba(0,0,0,0.7)] border-[rgba(245,196,0,0.25)]'
+          }`}>
+            <div className="flex items-center gap-2">
+              <Flame size={14} className={`flex-shrink-0 ${timer.expired ? 'text-white/20' : 'text-[#F5C400] animate-pulse'}`} />
+              <div>
+                <p className={`text-[9px] font-bold tracking-[2px] uppercase ${timer.expired ? 'text-white/30' : 'text-[#F5C400]'}`}>
+                  {timer.expired ? 'Oferta encerrada' : 'Oferta por tempo limitado'}
+                </p>
+                <p className="text-[10px] text-white/40">
+                  DE <span className="line-through text-white/30">R$ 229,90</span>
+                  <span className="text-white/40 mx-1">→</span>
+                  POR <span className={`font-bold ${timer.expired ? 'text-white/40' : 'text-[#F5C400]'}`}>R$ 189,90</span>
+                </p>
               </div>
+            </div>
+            {!timer.expired && (
               <div className="flex items-center gap-1 font-mono font-bold flex-shrink-0">
                 {[timer.h, timer.m, timer.s].map((val, i) => (
                   <span key={i} className="flex items-center gap-1">
@@ -103,8 +109,8 @@ export function HeroSection() {
                   </span>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Cards */}
           <div className="flex gap-3">
