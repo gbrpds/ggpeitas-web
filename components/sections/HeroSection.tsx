@@ -79,7 +79,7 @@ export function HeroSection() {
         </div>
 
         {/* ── DIREITA: timer + cards ── */}
-        <div className="hidden lg:flex flex-col px-4 pr-[4%] pt-4 pb-0 gap-3 h-full">
+        <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-3 h-full">
 
           {/* Banner oferta */}
           {!timer.expired && (
@@ -107,7 +107,7 @@ export function HeroSection() {
           )}
 
           {/* Cards */}
-          <div className="flex gap-3" style={{ height: 'calc(88vh - 68px - 72px)' }}>
+          <div className="flex gap-3" style={{ maxHeight: 'calc(88vh - 68px - 80px)' }}>
             {[
               { p: products[0], color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
               { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
