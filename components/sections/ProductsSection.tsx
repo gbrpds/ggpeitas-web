@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { products } from '@/lib/products';
 import { useStore } from '@/lib/store';
 import { useOfferTimer } from '@/lib/useOfferTimer';
-import { ChevronRight } from 'lucide-react';
 
 const activeProducts = products.filter(p => p.active !== false && (p.id === 0 || p.id === 1));
 
@@ -83,28 +82,6 @@ export function ProductsSection() {
           ))}
         </div>
 
-        {/* Em breve */}
-        <div className="border-t border-white/[0.06] pt-14">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
-            <div>
-              <p className="flex items-center gap-3 text-[10px] font-bold tracking-[4px] uppercase text-white/30 mb-3">
-                <span className="w-5 h-px bg-white/20" /> Em breve
-              </p>
-              <h3 className="font-display text-[32px] tracking-[2px] text-white/40">
-                NOVOS MODELOS <span className="text-white/20">A CAMINHO</span>
-              </h3>
-              <p className="text-white/25 text-[13px] mt-1">Seleções e clubes europeus · Novos modelos chegando em breve</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 text-white/25 text-[13px]">
-            <p className="flex items-center gap-2"><ChevronRight size={13} className="text-white/20" /> Argentina · Portugal · Alemanha · França · Espanha · Bélgica · Inglaterra · Colômbia</p>
-            <p className="flex items-center gap-2"><ChevronRight size={13} className="text-white/20" /> Real Madrid · Barcelona · PSG · Manchester City e muito mais</p>
-          </div>
-          <p className="text-white/20 text-[12px] mt-4 flex items-center gap-1.5">
-            <ChevronRight size={12} /> Acompanhe nossas redes sociais para ser o primeiro a saber dos lançamentos
-          </p>
-        </div>
       </div>
     </section>
   );
