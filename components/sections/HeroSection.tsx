@@ -79,7 +79,7 @@ export function HeroSection() {
         </div>
 
         {/* ── DIREITA: timer + cards ── */}
-        <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-3 h-full">
+        <div className="hidden lg:flex flex-col justify-center px-4 pr-[4%] gap-4 h-full py-8">
 
           {/* Banner oferta — sempre visível */}
           <div className={`flex items-center justify-between backdrop-blur-sm border rounded-xl px-4 py-2.5 flex-shrink-0 ${

@@ -7,16 +7,8 @@ export function useOfferTimer() {
   const [timeLeft, setTimeLeft] = useState(OFFER_DURATION);
 
   useEffect(() => {
-    const key = 'ggpeitas_offer_expiry';
-    const stored = localStorage.getItem(key);
-    let expiry: number;
-
-    if (stored) {
-      expiry = parseInt(stored);
-    } else {
-      expiry = Date.now() + OFFER_DURATION * 1000;
-      localStorage.setItem(key, String(expiry));
-    }
+    // Reinicia sempre do zero a cada visita/refresh
+    const expiry = Date.now() + OFFER_DURATION * 1000;
 
     const tick = () => {
       const left = Math.max(0, Math.floor((expiry - Date.now()) / 1000));
