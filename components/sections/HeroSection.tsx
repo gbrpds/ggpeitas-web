@@ -106,14 +106,14 @@ export function HeroSection() {
             </div>
           )}
 
-          {/* Cards — crescem para preencher o espaço restante */}
-          <div className="flex gap-3 flex-1 min-h-0">
+          {/* Cards */}
+          <div className="flex gap-3" style={{ height: 'calc(88vh - 68px - 72px)' }}>
             {[
               { p: products[0], color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
               { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
             ].map(({ p, color, badge, badgeColor }) => (
-              <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-t-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-1 flex flex-col">
-                {/* Imagem — cresce */}
+              <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-t-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-1 flex flex-col min-h-0">
+                {/* Imagem */}
                 <div className="flex-1 relative overflow-hidden min-h-0" style={{ background: color }}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
                   {p.images && p.images[0] ? (
