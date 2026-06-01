@@ -9,11 +9,14 @@ export const products: Product[] = [
     badge: 'novo',
     price: 'R$ 189,90',
     priceNum: 18990,
+    originalPrice: 'R$ 229,90',
     icon: '🇧🇷',
     bg: 'linear-gradient(135deg,#003018,#006B2D)',
     images: ['/products/brasil-home-foto1.png', '/products/brasil-home-foto2.png', '/products/brasil-home-foto3.png', '/products/brasil-home-foto4.png'],
     desc: 'A nova camisa da Seleção Brasileira para a Copa do Mundo 2026. Modelo jogador premium com toda a tecnologia e o orgulho verde e amarelo.',
     filter: 'selecao',
+    active: true,
+    stock: { M: 2, G: 2 },
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -26,14 +29,17 @@ export const products: Product[] = [
     name: 'Brasil 2026/27 - Jogador',
     label: 'Away',
     cat: 'Seleção · Copa do Mundo 2026 · Modelo Jogador',
-    badge: 'jogador',
+    badge: 'novo',
     price: 'R$ 189,90',
     priceNum: 18990,
+    originalPrice: 'R$ 229,90',
     icon: '⚫',
     bg: 'linear-gradient(135deg,#0a0f2e,#001a5e)',
     images: ['/products/brasil-away-foto1.png', '/products/brasil-away-foto2.png', '/products/brasil-away-foto3.png', '/products/brasil-away-foto4.png', '/products/brasil-away-foto5.png'],
     desc: 'A camisa alternativa da Seleção Brasileira para 2026. Design arrojado e moderno para representar o Brasil de um ângulo diferente.',
     filter: 'selecao',
+    active: true,
+    stock: { M: 2, G: 2 },
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -53,6 +59,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#0a0a1a,#111128)',
     desc: 'O clube mais vitorioso do mundo. Camisa do Real Madrid com o clássico branco imaculado em modelo jogador Adidas.',
     filter: 'clube',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -72,6 +79,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#001a3a,#003570)',
     desc: 'A dominante equipe de Guardiola com seu azul celeste característico. Modelo jogador Puma com acabamento premium.',
     filter: 'clube',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -92,6 +100,7 @@ export const products: Product[] = [
     images: ['/products/arg-home-foto1.png', '/products/arg-home-foto2.png', '/products/arg-home-foto3.png', '/products/arg-home-foto4.png'],
     desc: 'As listras albicelestes de Messi para a defesa do título mundial. Camisa oficial Argentina 2026 modelo jogador.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -111,6 +120,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#1a0010,#3a0020)',
     desc: 'Clássico e atemporal. A camisa do Barça com as tradicionais listras blaugrana em modelo jogador Nike.',
     filter: 'clube',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -130,6 +140,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#000818,#001530)',
     desc: 'O clube mais glamouroso da Europa. Camisa do Paris Saint-Germain com design fashion-forward.',
     filter: 'clube',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -150,6 +161,7 @@ export const products: Product[] = [
     images: ['/products/pt-home-foto1.png', '/products/pt-home-foto2.png', '/products/pt-home-foto3.png'],
     desc: 'Vermelho e verde da nação portuguesa. Portugal para a Copa 2026 com CR7 e a nova geração.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -170,6 +182,7 @@ export const products: Product[] = [
     images: ['/products/de-home-foto1.png', '/products/de-home-foto2.png', '/products/de-home-foto3.png'],
     desc: 'O clássico branco alemão de volta às grandes competições. Alemanha 2026 com o rigor e precisão que só a Mannschaft tem.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -189,6 +202,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#1a1400,#3a2e00)',
     desc: 'O amarelo vibrante da Colômbia com James Rodríguez à frente. Uma das seleções mais elegantes da Copa 2026.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -208,6 +222,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#0a0a1a,#001030)',
     desc: 'A camisa dos Três Leões para conquistar o mundo em 2026. Inglaterra com Bellingham liderando a nova geração.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -227,6 +242,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#00052e,#001080)',
     desc: 'Les Bleus com Mbappé em busca do tri. A camisa azul da França é uma das mais icônicas do futebol mundial.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -246,6 +262,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#1a0000,#550000)',
     desc: 'A Roja defensora do título europeu chega para a Copa 2026 com Yamal e Pedri reinventando o futebol.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -265,6 +282,7 @@ export const products: Product[] = [
     bg: 'linear-gradient(135deg,#1a0000,#3a0000)',
     desc: 'Os Diabos Vermelhos com De Bruyne em sua última dança mundial. Bélgica 2026 com o vermelho que marca.',
     filter: 'selecao',
+    active: false,
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },

@@ -24,9 +24,13 @@ export function ProductModal() {
   const hasImages = images.length > 0;
 
   const pixPrice = ((modalProduct.priceNum * 0.9) / 100).toFixed(2).replace('.', ',');
+  const stock = modalProduct.stock ?? null;
+  const hasStock = (size: string) => !stock || (stock[size] !== undefined && stock[size] > 0);
+  const stockQty = (size: string) => stock?.[size] ?? null;
 
   const handleAdd = () => {
     if (!selectedSize) { show('⚠️ Selecione um tamanho!'); return; }
+    if (!hasStock(selectedSize)) { show('⚠️ Tamanho indisponível!'); return; }
     addToCart(modalProduct, selectedSize);
     closeModal();
     show(`✅ ${modalProduct.name} (${selectedSize}) adicionado!`);
@@ -126,6 +130,9 @@ export function ProductModal() {
 
             <div className="mb-6">
               <span className="block text-[11px] text-white/40 mb-1">Modelo Jogador · A partir de</span>
+              {modalProduct.originalPrice && (
+                <span className="block text-[14px] text-white/30 line-through">{modalProduct.originalPrice}</span>
+              )}
               <span className="font-bold text-[38px] text-[#F5C400] leading-none">{modalProduct.price}</span>
               <p className="text-[12px] text-[#008C3A] mt-1">R$ {pixPrice} no PIX (10% OFF)</p>
             </div>
@@ -133,21 +140,46 @@ export function ProductModal() {
             <p className="text-[10px] font-bold tracking-[2px] uppercase text-white/40 mb-3">
               Selecione o tamanho
             </p>
-            <div className="flex gap-2 flex-wrap mb-6">
-              {SIZES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSelectedSize(s)}
-                  className={`w-11 h-11 border text-[13px] font-semibold rounded-sm transition-all ${
-                    selectedSize === s
-                      ? 'border-[#F5C400] bg-[#F5C400] text-black'
-                      : 'border-white/20 text-white hover:border-[#F5C400] hover:bg-[#F5C400] hover:text-black'
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+            <div className="flex gap-2 flex-wrap mb-2">
+              {SIZES.map((s) => {
+                const available = hasStock(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => available && setSelectedSize(s)}
+                    disabled={!available}
+                    className={`w-11 h-11 border text-[13px] font-semibold rounded-sm transition-all relative ${
+                      !available
+                        ? 'border-white/[0.06] text-white/20 cursor-not-allowed bg-white/[0.02]'
+                        : selectedSize === s
+                          ? 'border-[#F5C400] bg-[#F5C400] text-black'
+                          : 'border-white/20 text-white hover:border-[#F5C400] hover:bg-[#F5C400] hover:text-black'
+                    }`}
+                  >
+                    {s}
+                    {!available && (
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="w-full h-px bg-white/20 rotate-45 absolute" />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Alerta últimas unidades */}
+            {selectedSize && hasStock(selectedSize) && stockQty(selectedSize) !== null && (
+              <div className="flex items-center gap-2 mb-5 bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.2)] rounded-sm px-3 py-2">
+                <span className="text-[#F5C400] text-[18px]">⚡</span>
+                <p className="text-[12px] text-[#F5C400] font-bold">
+                  Últimas {stockQty(selectedSize)} unidades no tamanho {selectedSize}!
+                </p>
+              </div>
+            )}
+            {selectedSize && !hasStock(selectedSize) && (
+              <p className="text-[12px] text-red-400 mb-5">Tamanho indisponível no momento.</p>
+            )}
+            {!selectedSize && <div className="mb-5" />}
 
             <div className="flex flex-col gap-2.5 mb-4">
               <button
