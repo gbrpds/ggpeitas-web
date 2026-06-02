@@ -3,7 +3,7 @@ import type { NextAuthConfig } from 'next-auth';
 export const authConfig = {
   pages: { signIn: '/login' },
   trustHost: true,
-  session: { strategy: 'jwt' },
+  session: { strategy: 'jwt', maxAge: 3 * 60 * 60 }, // 3 horas
   callbacks: {
     // Mapeia role do JWT token para session.user
     async session({ session, token }) {

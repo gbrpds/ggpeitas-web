@@ -2,11 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import MercadoPagoConfig, { Payment } from 'mercadopago';
+import { rateLimit } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 });
+  }
+
+  // Rate limit: máx 5 PIX por 10 min por usuário
+  const rl = rateLimit(`pix:${session.user.id}`, 5, 10 * 60 * 1000);
+  if (!rl.ok) {
+    return NextResponse.json({ error: 'Muitas tentativas. Aguarde alguns minutos.' }, { status: 429 });
   }
 
   const { orderId, cpf } = await req.json();

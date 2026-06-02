@@ -1,10 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, CreditCard, QrCode, ChevronRight, Lock, CheckCircle } from 'lucide-react';
+import { MapPin, CreditCard, QrCode, ChevronRight, Lock, CheckCircle, Clock, AlertTriangle, ShoppingCart } from 'lucide-react';
 import { useStore } from '@/lib/store';
 
 const fmt = (n: number) => `R$ ${(n / 100).toFixed(2).replace('.', ',')}`;
@@ -17,7 +17,44 @@ const fmtCpf = (v: string) => {
           .replace(/(\d{3})/, '$1');
 };
 
+const CHECKOUT_TIMEOUT = 15 * 60; // 15 minutos em segundos
+
 type PayMethod = 'PIX' | 'CREDIT_CARD';
+
+/** Timer visual de checkout */
+function CheckoutTimer({ onExpire }: { onExpire: () => void }) {
+  const [timeLeft, setTimeLeft] = useState(CHECKOUT_TIMEOUT);
+  const expiredRef = useRef(false);
+
+  useEffect(() => {
+    const expiry = Date.now() + CHECKOUT_TIMEOUT * 1000;
+    const id = setInterval(() => {
+      const left = Math.max(0, Math.floor((expiry - Date.now()) / 1000));
+      setTimeLeft(left);
+      if (left === 0 && !expiredRef.current) {
+        expiredRef.current = true;
+        onExpire();
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [onExpire]);
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const m = pad(Math.floor(timeLeft / 60));
+  const s = pad(timeLeft % 60);
+  const urgent = timeLeft <= 120; // últimos 2 min ficam vermelhos
+
+  return (
+    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-[13px] font-semibold transition-colors ${
+      urgent
+        ? 'bg-red-500/10 border-red-500/30 text-red-400 animate-pulse'
+        : 'bg-[rgba(245,196,0,0.06)] border-[rgba(245,196,0,0.2)] text-[#F5C400]'
+    }`}>
+      <Clock size={14} className="flex-shrink-0" />
+      <span>Sessão de compra: <span className="font-mono">{m}:{s}</span></span>
+    </div>
+  );
+}
 
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
@@ -27,6 +64,7 @@ export default function CheckoutPage() {
   const [pay, setPay] = useState<PayMethod>('PIX');
   const [loading, setLoading] = useState(false);
   const [cpf, setCpf] = useState('');
+  const [expired, setExpired] = useState(false);
   const [address, setAddress] = useState({
     cep: '', street: '', number: '', complement: '', district: '', city: '', state: '',
   });
@@ -34,6 +72,17 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login?redirect=/checkout');
   }, [status, router]);
+
+  // Carrinho vazio → volta para loja
+  useEffect(() => {
+    if (status === 'authenticated' && cart.length === 0) {
+      router.push('/#loja');
+    }
+  }, [cart, status, router]);
+
+  const handleExpire = useCallback(() => {
+    setExpired(true);
+  }, []);
 
   const fetchCep = async () => {
     const cep = address.cep.replace(/\D/g, '');
@@ -46,13 +95,14 @@ export default function CheckoutPage() {
   };
 
   const placeOrder = async () => {
+    if (expired) return;
     if (pay === 'PIX' && cpf.replace(/\D/g, '').length !== 11) {
       alert('Informe um CPF válido para pagamento via PIX.');
       return;
     }
     setLoading(true);
 
-    // 1. Salva o pedido
+    // 1. Salva o pedido (preços são validados no servidor)
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -61,17 +111,20 @@ export default function CheckoutPage() {
           productId: i.id,
           name: `${i.name} ${i.label}`,
           size: i.size,
-          price: pay === 'PIX' ? Math.round(i.priceNum * 0.9) : i.priceNum,
           qty: i.qty,
           image: i.images?.[0] ?? null,
         })),
         address,
         paymentMethod: pay,
-        total: pay === 'PIX' ? Math.round(cartTotal() * 0.9) : cartTotal(),
+        // Não enviamos preço — o servidor calcula
       }),
     });
     const data = await res.json();
-    if (!res.ok) { setLoading(false); return; }
+    if (!res.ok) {
+      setLoading(false);
+      alert(data.error ?? 'Erro ao criar pedido. Tente novamente.');
+      return;
+    }
 
     clearCart();
 
@@ -121,16 +174,48 @@ export default function CheckoutPage() {
   const subtotal = cartTotal();
   const total = pay === 'PIX' ? Math.round(subtotal * 0.9) : subtotal;
 
+  // Modal de sessão expirada
+  if (expired) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4 pt-[68px]">
+        <div className="max-w-[420px] w-full bg-[#111] border border-red-500/30 rounded-xl p-8 text-center">
+          <AlertTriangle size={48} className="text-red-400 mx-auto mb-4" />
+          <h2 className="font-display text-[28px] tracking-[2px] mb-2">Sessão Expirada</h2>
+          <p className="text-white/50 text-[14px] mb-6">
+            Sua sessão de compra de 15 minutos expirou. Por segurança, reinicie o processo para continuar.
+          </p>
+          <Link
+            href="/#loja"
+            className="inline-block bg-[#F5C400] text-black px-8 py-3 font-display text-[18px] tracking-[2px] rounded-sm hover:bg-[#D9A300] transition-colors"
+          >
+            VOLTAR À LOJA
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#050505] pt-[68px] pb-16">
       <div className="max-w-[1100px] mx-auto px-[5%] py-10">
-        <div className="mb-8">
-          <p className="text-[10px] tracking-[3px] uppercase text-[#008C3A] mb-2 flex items-center gap-2">
-            <Lock size={12} /> Compra Segura
-          </p>
-          <h1 className="font-display text-[40px] tracking-[2px]">CHECKOUT</h1>
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <p className="text-[10px] tracking-[3px] uppercase text-[#008C3A] mb-2 flex items-center gap-2">
+              <Lock size={12} /> Compra Segura
+            </p>
+            <h1 className="font-display text-[40px] tracking-[2px]">CHECKOUT</h1>
+          </div>
+          {/* Timer — aparece assim que entra no checkout */}
+          <CheckoutTimer onExpire={handleExpire} />
         </div>
 
+        {cart.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-white/40">
+            <ShoppingCart size={48} />
+            <p className="text-[16px]">Seu carrinho está vazio.</p>
+            <Link href="/#loja" className="text-[#F5C400] hover:underline text-[14px]">Voltar à loja</Link>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
           <div className="flex flex-col gap-6">
 
@@ -139,55 +224,65 @@ export default function CheckoutPage() {
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-7 h-7 rounded-full bg-[#F5C400] text-black flex items-center justify-center text-[13px] font-bold">1</div>
                 <h2 className="font-display text-[22px] tracking-[1px] flex items-center gap-2"><MapPin size={18} /> Endereço de entrega</h2>
+                {step === 'payment' && <CheckCircle size={16} className="text-[#008C3A] ml-auto" />}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="sm:col-span-1">
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">CEP *</label>
-                  <input value={address.cep} onChange={(e) => setAddress({ ...address, cep: e.target.value })} onBlur={fetchCep}
-                    placeholder="00000-000" maxLength={9}
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+              {step === 'address' ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="sm:col-span-1">
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">CEP *</label>
+                      <input value={address.cep} onChange={(e) => setAddress({ ...address, cep: e.target.value })} onBlur={fetchCep}
+                        placeholder="00000-000" maxLength={9}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Rua *</label>
+                      <input value={address.street} onChange={(e) => setAddress({ ...address, street: e.target.value })} placeholder="Rua das Flores"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Número *</label>
+                      <input value={address.number} onChange={(e) => setAddress({ ...address, number: e.target.value })} placeholder="123"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Complemento</label>
+                      <input value={address.complement} onChange={(e) => setAddress({ ...address, complement: e.target.value })} placeholder="Apto 12"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Bairro *</label>
+                      <input value={address.district} onChange={(e) => setAddress({ ...address, district: e.target.value })} placeholder="Centro"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Cidade *</label>
+                      <input value={address.city} onChange={(e) => setAddress({ ...address, city: e.target.value })} placeholder="São Paulo"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Estado *</label>
+                      <input value={address.state} onChange={(e) => setAddress({ ...address, state: e.target.value })} placeholder="SP" maxLength={2}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors uppercase" />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const { cep, street, number, district, city, state } = address;
+                      if (!cep || !street || !number || !district || !city || !state) return;
+                      setStep('payment');
+                    }}
+                    className="mt-5 flex items-center gap-2 bg-[#F5C400] text-black px-6 py-3 font-display text-[18px] tracking-[2px] rounded-sm hover:bg-[#D9A300] transition-colors"
+                  >
+                    CONTINUAR <ChevronRight size={18} />
+                  </button>
+                </>
+              ) : (
+                <div className="text-[13px] text-white/50">
+                  {address.street}, {address.number} {address.complement && `· ${address.complement}`} — {address.district}, {address.city}/{address.state} · CEP {address.cep}
+                  <button onClick={() => setStep('address')} className="ml-3 text-[#F5C400] text-[11px] hover:underline">Editar</button>
                 </div>
-                <div className="sm:col-span-2">
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Rua *</label>
-                  <input value={address.street} onChange={(e) => setAddress({ ...address, street: e.target.value })} placeholder="Rua das Flores"
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Número *</label>
-                  <input value={address.number} onChange={(e) => setAddress({ ...address, number: e.target.value })} placeholder="123"
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Complemento</label>
-                  <input value={address.complement} onChange={(e) => setAddress({ ...address, complement: e.target.value })} placeholder="Apto 12"
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Bairro *</label>
-                  <input value={address.district} onChange={(e) => setAddress({ ...address, district: e.target.value })} placeholder="Centro"
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Cidade *</label>
-                  <input value={address.city} onChange={(e) => setAddress({ ...address, city: e.target.value })} placeholder="São Paulo"
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="text-[10px] tracking-[2px] uppercase text-white/40 mb-1 block">Estado *</label>
-                  <input value={address.state} onChange={(e) => setAddress({ ...address, state: e.target.value })} placeholder="SP" maxLength={2}
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-sm px-3 py-2.5 text-[14px] text-white placeholder-white/25 focus:border-[#F5C400] focus:outline-none transition-colors uppercase" />
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  const { cep, street, number, district, city, state } = address;
-                  if (!cep || !street || !number || !district || !city || !state) return;
-                  setStep('payment');
-                }}
-                className="mt-5 flex items-center gap-2 bg-[#F5C400] text-black px-6 py-3 font-display text-[18px] tracking-[2px] rounded-sm hover:bg-[#D9A300] transition-colors"
-              >
-                CONTINUAR <ChevronRight size={18} />
-              </button>
+              )}
             </div>
 
             {/* PAGAMENTO */}
@@ -209,7 +304,6 @@ export default function CheckoutPage() {
                     </button>
                   ))}
                 </div>
-
 
                 {/* Info cartão */}
                 {pay === 'CREDIT_CARD' && (
@@ -242,14 +336,14 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                <button onClick={placeOrder} disabled={loading}
+                <button onClick={placeOrder} disabled={loading || expired}
                   className="w-full bg-[#008C3A] text-white py-4 font-display text-[22px] tracking-[2px] rounded-sm hover:bg-[#006B2D] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                   <Lock size={18} />
                   {loading ? 'PROCESSANDO...' : pay === 'PIX'
                     ? `GERAR PIX · ${fmt(total)}`
                     : `PAGAR COM MERCADO PAGO · ${fmt(subtotal)}`}
                 </button>
-                <p className="text-center text-[10px] text-white/25 mt-3 uppercase tracking-wider">🔒 Pagamento 100% seguro</p>
+                <p className="text-center text-[10px] text-white/25 mt-3 uppercase tracking-wider">🔒 Pagamento 100% seguro · SSL</p>
               </div>
             )}
           </div>
@@ -296,6 +390,7 @@ export default function CheckoutPage() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   );
