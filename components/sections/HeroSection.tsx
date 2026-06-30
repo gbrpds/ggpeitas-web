@@ -102,15 +102,9 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="/catalogo"
-                className="flex items-center gap-2 bg-[#F5C400] text-black py-3.5 px-7 font-display text-[16px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all"
+                className="flex items-center gap-2 bg-[#F5C400] text-black py-3.5 px-8 font-display text-[16px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all"
               >
-                <ShoppingBag size={16} /> VER CATÁLOGO
-              </a>
-              <a
-                href="#selecoes"
-                className="flex items-center gap-2 bg-transparent text-white py-3.5 px-7 font-display text-[16px] tracking-[2px] border border-white/20 rounded-sm hover:border-white hover:bg-white/[0.04] transition-all"
-              >
-                SELEÇÕES
+                <ShoppingBag size={16} /> COMPRAR AGORA
               </a>
             </div>
 
