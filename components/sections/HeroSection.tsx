@@ -39,7 +39,7 @@ export function HeroSection() {
         {/* Foto de fundo — coloque /public/hero-bg.jpg (foto de jogadores) */}
         <div className="absolute inset-0 bg-[#050505]" />
         <Image
-          src="/hero-bg.jpg"
+          src="/hero-bg.png"
           alt=""
           fill
           className="object-cover object-center opacity-[0.12] mix-blend-luminosity"
