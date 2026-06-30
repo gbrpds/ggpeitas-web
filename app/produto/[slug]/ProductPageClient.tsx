@@ -28,7 +28,7 @@ function getSuggestedSize(height: number, weight: number): string {
   return bmi > 28 ? 'XGG' : 'GG';
 }
 
-function SizeAdvisor({ onSelect }: { onSelect: (s: string) => void }) {
+function SizeAdvisor({ onSelect, hasStock }: { onSelect: (s: string) => void; hasStock: (s: string) => boolean }) {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [result, setResult] = useState<string | null>(null);
@@ -70,15 +70,19 @@ function SizeAdvisor({ onSelect }: { onSelect: (s: string) => void }) {
         Calcular meu tamanho
       </button>
       {result && (
-        <div className="mt-4 bg-[rgba(0,140,58,0.08)] border border-[rgba(0,140,58,0.25)] rounded-lg p-4 text-center">
+        <div className={`mt-4 rounded-lg p-4 text-center border ${hasStock(result) ? 'bg-[rgba(0,140,58,0.08)] border-[rgba(0,140,58,0.25)]' : 'bg-[rgba(255,60,60,0.06)] border-[rgba(255,60,60,0.2)]'}`}>
           <p className="text-[11px] text-white/50 mb-1">Tamanho sugerido para você</p>
-          <p className="font-display text-[40px] text-[#008C3A] leading-none">{result}</p>
-          <button
-            onClick={() => onSelect(result)}
-            className="mt-3 text-[10px] font-bold tracking-[2px] uppercase text-[#F5C400] hover:underline"
-          >
-            Selecionar este tamanho →
-          </button>
+          <p className={`font-display text-[40px] leading-none ${hasStock(result) ? 'text-[#008C3A]' : 'text-white/30 line-through'}`}>{result}</p>
+          {hasStock(result) ? (
+            <button
+              onClick={() => onSelect(result)}
+              className="mt-3 text-[10px] font-bold tracking-[2px] uppercase text-[#F5C400] hover:underline"
+            >
+              Selecionar este tamanho →
+            </button>
+          ) : (
+            <p className="mt-2 text-[11px] text-red-400/70">Sem estoque neste tamanho</p>
+          )}
         </div>
       )}
     </div>
@@ -128,6 +132,7 @@ export function ProductPageClient({ product: p, related }: { product: Product; r
 
   const handleAddToCart = () => {
     if (!selectedSize) { show('Selecione um tamanho'); return; }
+    if (!hasStock(selectedSize)) { show(`Tamanho ${selectedSize} sem estoque`); return; }
     addToCart(p, selectedSize);
     show(`${p.name} ${p.label} (${selectedSize}) adicionado!`);
   };
@@ -310,7 +315,7 @@ export function ProductPageClient({ product: p, related }: { product: Product; r
                   {showAdvisor ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                 </button>
                 {showAdvisor && (
-                  <SizeAdvisor onSelect={(s) => { setSelectedSize(s); setShowAdvisor(false); }} />
+                  <SizeAdvisor onSelect={(s) => { setSelectedSize(s); setShowAdvisor(false); }} hasStock={hasStock} />
                 )}
               </div>
             )}
