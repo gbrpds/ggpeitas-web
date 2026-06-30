@@ -19,7 +19,7 @@ export const products: Product[] = [
     filter: 'selecao',
     category: 'selecoes',
     active: true,
-    stock: { M: 2, G: 2 },
+    stockModel: 'Brasil 2026 Home',
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },
@@ -44,7 +44,7 @@ export const products: Product[] = [
     filter: 'selecao',
     category: 'selecoes',
     active: true,
-    stock: { M: 2, G: 2 },
+    stockModel: 'Brasil 2026 Away',
     specs: [
       { key: 'Versão', val: 'Modelo Jogador' },
       { key: 'Material', val: '100% Poliéster' },

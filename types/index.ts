@@ -17,6 +17,7 @@ export interface Product {
   specs?: { key: string; val: string }[];
   active?: boolean;   // false = em breve
   stock?: Record<string, number>;
+  stockModel?: string; // nome do modelo no banco de estoque (ex: "Brasil 2026 Home")
 }
 
 export interface CartItem extends Product {

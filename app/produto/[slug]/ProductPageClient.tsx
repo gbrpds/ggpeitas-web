@@ -116,7 +116,7 @@ function RelatedCard({ p }: { p: Product }) {
   );
 }
 
-export function ProductPageClient({ product: p, related }: { product: Product; related: Product[] }) {
+export function ProductPageClient({ product: p, related, liveStock }: { product: Product; related: Product[]; liveStock?: Record<string, number> }) {
   const { addToCart } = useStore();
   const { show } = useToast();
   const [activeImg, setActiveImg] = useState(0);
@@ -125,7 +125,8 @@ export function ProductPageClient({ product: p, related }: { product: Product; r
   const [showAdvisor, setShowAdvisor] = useState(false);
 
   const images = p.images ?? [];
-  const stock = p.stock ?? null;
+  // liveStock from DB takes precedence over static stock in products.ts
+  const stock = liveStock ?? p.stock ?? null;
   const hasStock = (s: string) => !stock || (stock[s] !== undefined && stock[s] > 0);
   const stockQty = (s: string) => stock?.[s] ?? null;
   const pixPrice = ((p.priceNum * 0.9) / 100).toFixed(2).replace('.', ',');
