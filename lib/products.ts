@@ -4,6 +4,7 @@ export const products: Product[] = [
   // ── SELEÇÕES ATIVAS ────────────────────────────────────────────────
   {
     id: 0,
+    slug: 'brasil-2026-home',
     name: 'Brasil 2026/27',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -28,6 +29,7 @@ export const products: Product[] = [
   },
   {
     id: 1,
+    slug: 'brasil-2026-away',
     name: 'Brasil 2026/27',
     label: 'Away',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -54,6 +56,7 @@ export const products: Product[] = [
   // ── SELEÇÕES EM BREVE ──────────────────────────────────────────────
   {
     id: 4,
+    slug: 'argentina-2026-home',
     name: 'Argentina 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -76,6 +79,7 @@ export const products: Product[] = [
   },
   {
     id: 7,
+    slug: 'portugal-2026-home',
     name: 'Portugal 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -98,6 +102,7 @@ export const products: Product[] = [
   },
   {
     id: 8,
+    slug: 'alemanha-2026-home',
     name: 'Alemanha 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -120,6 +125,7 @@ export const products: Product[] = [
   },
   {
     id: 9,
+    slug: 'colombia-2026-home',
     name: 'Colômbia 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -141,6 +147,7 @@ export const products: Product[] = [
   },
   {
     id: 10,
+    slug: 'inglaterra-2026-home',
     name: 'Inglaterra 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -162,6 +169,7 @@ export const products: Product[] = [
   },
   {
     id: 11,
+    slug: 'franca-2026-home',
     name: 'França 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -183,6 +191,7 @@ export const products: Product[] = [
   },
   {
     id: 12,
+    slug: 'espanha-2026-home',
     name: 'Espanha 2026',
     label: 'Home',
     cat: 'Seleção · Copa 2026 · Modelo Jogador',
@@ -206,6 +215,7 @@ export const products: Product[] = [
   // ── TIMES BRASILEIROS EM BREVE ─────────────────────────────────────
   {
     id: 20,
+    slug: 'gremio-2025',
     name: 'Grêmio',
     label: '2025',
     cat: 'Time Brasileiro · Série A · Modelo Jogador',
@@ -226,6 +236,7 @@ export const products: Product[] = [
   },
   {
     id: 21,
+    slug: 'internacional-2025',
     name: 'Internacional',
     label: '2025',
     cat: 'Time Brasileiro · Série A · Modelo Jogador',
@@ -246,6 +257,7 @@ export const products: Product[] = [
   },
   {
     id: 2,
+    slug: 'real-madrid-2425',
     name: 'Real Madrid',
     label: '2024/25',
     cat: 'Clube · La Liga · Modelo Jogador',
@@ -267,6 +279,7 @@ export const products: Product[] = [
   },
   {
     id: 3,
+    slug: 'manchester-city-2425',
     name: 'Manchester City',
     label: '2024/25',
     cat: 'Clube · Premier League · Modelo Jogador',
@@ -290,6 +303,7 @@ export const products: Product[] = [
   // ── RETRÔS EM BREVE ───────────────────────────────────────────────
   {
     id: 30,
+    slug: 'brasil-1970-retro',
     name: 'Brasil 1970',
     label: 'Retrô',
     cat: 'Seleção · Copa 1970 · Retrô Premium',
@@ -311,6 +325,7 @@ export const products: Product[] = [
   },
   {
     id: 31,
+    slug: 'brasil-1994-retro',
     name: 'Brasil 1994',
     label: 'Retrô',
     cat: 'Seleção · Copa 1994 · Retrô Premium',
@@ -332,6 +347,7 @@ export const products: Product[] = [
   },
   {
     id: 32,
+    slug: 'brasil-2002-retro',
     name: 'Brasil 2002',
     label: 'Retrô',
     cat: 'Seleção · Copa 2002 · Retrô Premium',

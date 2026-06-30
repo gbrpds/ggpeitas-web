@@ -6,6 +6,7 @@ import { products } from '@/lib/products';
 import { useStore } from '@/lib/store';
 import { Product } from '@/types';
 import { Bell, ShoppingBag, Clock } from 'lucide-react';
+import Link from 'next/link';
 
 type Tab = 'todos' | 'selecoes' | 'times-br' | 'retro';
 
@@ -58,12 +59,11 @@ function ComingSoonCard({ p }: { p: Product }) {
 }
 
 function ActiveCard({ p }: { p: Product }) {
-  const { openModal } = useStore();
   const totalStock = p.stock ? Object.values(p.stock).reduce((a, b) => a + b, 0) : null;
 
   return (
-    <div
-      onClick={() => openModal(p)}
+    <Link
+      href={`/produto/${p.slug}`}
       className="bg-[#111] border border-white/[0.07] rounded-xl cursor-pointer group hover:-translate-y-2 hover:border-[rgba(245,196,0,0.3)] hover:shadow-[0_24px_64px_rgba(0,0,0,0.6)] transition-all duration-300 flex flex-col overflow-hidden"
     >
       <div className="aspect-[4/5] relative overflow-hidden" style={{ background: p.bg }}>
@@ -108,12 +108,12 @@ function ActiveCard({ p }: { p: Product }) {
             <p className="text-[22px] font-bold text-[#F5C400]">{p.price}</p>
             <p className="text-[10px] text-[#008C3A]">R$ {((p.priceNum * 0.9) / 100).toFixed(2).replace('.', ',')} no PIX</p>
           </div>
-          <button className="bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.2)] text-[#F5C400] px-4 py-2 text-[10px] font-bold tracking-[2px] uppercase rounded-sm hover:bg-[#F5C400] hover:text-black transition-all flex items-center gap-1.5">
+          <span className="bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.2)] text-[#F5C400] px-4 py-2 text-[10px] font-bold tracking-[2px] uppercase rounded-sm group-hover:bg-[#F5C400] group-hover:text-black transition-all flex items-center gap-1.5">
             <ShoppingBag size={12} /> Ver
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

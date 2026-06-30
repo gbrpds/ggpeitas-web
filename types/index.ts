@@ -1,5 +1,6 @@
 export interface Product {
   id: number;
+  slug: string;        // URL amigável ex: brasil-2026-home
   name: string;
   label: string;
   cat: string;
