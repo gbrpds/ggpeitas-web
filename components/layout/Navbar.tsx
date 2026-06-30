@@ -130,10 +130,8 @@ export function Navbar() {
                                 <p className="text-[12px] text-white/60 group-hover:text-white transition-colors truncate leading-tight font-medium">
                                   {p.name} <span className="text-white/35 font-normal">{p.label}</span>
                                 </p>
-                                {p.active === false ? (
+                                {p.active === false && (
                                   <p className="text-[10px] text-white/25 mt-0.5">Em breve</p>
-                                ) : (
-                                  <p className="text-[10px] font-semibold mt-0.5" style={{ color: g.accent }}>{p.price}</p>
                                 )}
                               </div>
                             </Link>
