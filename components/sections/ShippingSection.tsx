@@ -55,8 +55,15 @@ export function ShippingSection() {
   };
 
   return (
-    <section className="bg-[#050505] py-24 px-[5%] overflow-hidden">
-      <div className="max-w-[1200px] mx-auto">
+    <section className="relative bg-[#050505] py-24 px-[5%] overflow-hidden">
+      <img
+        src="/sec2-bg.jpg"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.07] mix-blend-luminosity pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#070707] via-transparent to-[#0a0a0a] pointer-events-none" />
+      <div className="relative z-10 max-w-[1200px] mx-auto">
 
         {/* Header */}
         <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6">

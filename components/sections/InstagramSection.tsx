@@ -1,3 +1,6 @@
+'use client';
+import Image from 'next/image';
+
 function InstagramIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -6,46 +9,125 @@ function InstagramIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-const cells = [
-  { emoji: '🇧🇷', bg: 'linear-gradient(135deg,#1a2a0a,#0d1a05)', span: '' },
-  { emoji: '🇧🇷', bg: 'linear-gradient(135deg,#001a08,#003015)', span: 'col-span-2 row-span-2', label: 'BRASIL 2026', sub: 'HOME' },
-  { emoji: '⚫', bg: 'linear-gradient(135deg,#0d0d0d,#1a1a1a)', span: '' },
-  { emoji: '🔴', bg: 'linear-gradient(135deg,#150008,#0a0015)', span: '' },
-  { emoji: '⚽', bg: 'linear-gradient(135deg,#0a1520,#050d18)', span: '' },
-  { emoji: '🇵🇹', bg: 'linear-gradient(135deg,#001015,#00080d)', span: '' },
-];
+function PlayIcon() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+  );
+}
+
+function ReelBadge() {
+  return (
+    <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1">
+      <PlayIcon />
+      <span className="text-[9px] font-bold tracking-[1px] uppercase">Reels</span>
+    </div>
+  );
+}
+
+function Overlay({ size = 28 }: { size?: number }) {
+  return (
+    <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+      <InstagramIcon size={size} />
+    </div>
+  );
+}
+
+const profileUrl = 'https://www.instagram.com/ggpeitas/';
+const highlightUrl = 'https://www.instagram.com/stories/highlights/17892553650524254/';
 
 export function InstagramSection() {
   return (
-    <section className="bg-[#111] pt-10 pb-24 px-[5%]">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-9">
-        <div>
-          <p className="flex items-center gap-3 text-[10px] font-bold tracking-[4px] uppercase text-[#008C3A] mb-3">
-            <span className="w-5 h-px bg-[#008C3A]" /> Redes Sociais <span className="text-white/30 normal-case tracking-normal font-normal">(feedbacks)</span>
-          </p>
-          <h2 className="font-display leading-none tracking-[2px]" style={{ fontSize: 'clamp(40px,5.5vw,72px)' }}>
-            @GGPEITAS
-          </h2>
+    <section className="bg-[#0a0a0a] py-20 px-[5%]">
+      <div className="max-w-[1200px] mx-auto">
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+          <div>
+            <p className="flex items-center gap-3 text-[10px] font-bold tracking-[4px] uppercase text-[#008C3A] mb-3">
+              <span className="w-5 h-px bg-[#008C3A]" /> Siga a gente
+            </p>
+            <h2 className="font-display leading-none tracking-[2px]" style={{ fontSize: 'clamp(36px,5vw,64px)' }}>
+              @GG<span className="text-[#F5C400]">PEITAS</span>
+            </h2>
+          </div>
+          <a href={profileUrl} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 border border-white/15 text-white/50 hover:text-white hover:border-white/40 transition-all text-[12px] font-semibold px-4 py-2 rounded-lg flex-shrink-0">
+            <InstagramIcon size={14} /> Seguir no Instagram
+          </a>
         </div>
-        <a href="https://www.instagram.com/ggpeitas/" target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-2 text-white/40 text-[13px] hover:text-white transition-colors">
-          <InstagramIcon size={16} /> Ver no Instagram →
-        </a>
-      </div>
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-0.5 rounded overflow-hidden">
-        {cells.map((cell, i) => (
-          <a key={i} href="https://www.instagram.com/ggpeitas/" target="_blank" rel="noopener noreferrer"
-            className={`aspect-square overflow-hidden relative group ${cell.span}`}
-            style={{ background: cell.bg }}>
-            <div className="w-full h-full flex flex-col items-center justify-center gap-1 transition-transform duration-500 group-hover:scale-110">
-              <span className={cell.span ? 'text-[72px]' : 'text-[40px]'}>{cell.emoji}</span>
-              {cell.label && (<><span className="font-display text-[20px] tracking-[3px] text-white/80">{cell.label}</span><span className="text-[11px] tracking-[2px] font-bold text-[#F5C400]">{cell.sub}</span></>)}
+
+        {/* Grid mosaico — desktop 3 cols / mobile 2 cols */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3">
+
+          {/* video1 — full width mobile / 2×2 desktop */}
+          <a href={profileUrl} target="_blank" rel="noopener noreferrer"
+            className="col-span-2 lg:row-span-2 relative overflow-hidden rounded-2xl group block aspect-square bg-[#111]">
+            <video src="/instagram/video1.mp4" autoPlay muted loop playsInline
+              className="absolute inset-0 w-full h-full object-cover" />
+            <Overlay size={36} />
+          </a>
+
+          {/* reel1 — 1×1 */}
+          <a href="https://www.instagram.com/p/DZdXAlShB9r/" target="_blank" rel="noopener noreferrer"
+            className="relative overflow-hidden rounded-2xl group block aspect-square">
+            <video src="/instagram/reel.mp4" autoPlay muted loop playsInline
+              className="absolute inset-0 w-full h-full object-cover" />
+            <Overlay size={28} />
+            <ReelBadge />
+          </a>
+
+          {/* feedback1 — 1×1 */}
+          <a href={highlightUrl} target="_blank" rel="noopener noreferrer"
+            className="relative overflow-hidden rounded-2xl group block bg-[#111] aspect-square">
+            <Image src="/instagram/feedback1.png" alt="Feedback @lucas_severx" fill
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+              sizes="33vw" />
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 opacity-100 group-hover:opacity-0 transition-opacity">
+              <span className="text-[11px] font-bold tracking-[3px] uppercase text-[#4ade80]">Feedback</span>
             </div>
-            <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <InstagramIcon size={cell.span ? 32 : 22} />
+            <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <InstagramIcon size={28} />
             </div>
           </a>
-        ))}
+
+          {/* reel2 — 1×1 */}
+          <a href="https://www.instagram.com/p/DZnn0nWxo1-/" target="_blank" rel="noopener noreferrer"
+            className="relative overflow-hidden rounded-2xl group block aspect-square">
+            <video src="/instagram/reel2.mp4" autoPlay muted loop playsInline
+              className="absolute inset-0 w-full h-full object-cover" />
+            <Overlay size={28} />
+            <ReelBadge />
+          </a>
+
+          {/* post2 — 1×1 */}
+          <a href="https://www.instagram.com/p/DYTh2GtNrRf/" target="_blank" rel="noopener noreferrer"
+            className="relative overflow-hidden rounded-2xl group block bg-[#111] aspect-square">
+            <Image src="/instagram/post2.png" alt="Modelo Jogador Brasil Away" fill
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+              sizes="33vw" />
+            <Overlay size={28} />
+          </a>
+
+          {/* feedback2 — 1×1 */}
+          <a href={highlightUrl} target="_blank" rel="noopener noreferrer"
+            className="relative overflow-hidden rounded-2xl group block bg-[#111] aspect-square">
+            <Image src="/instagram/feedback2.png" alt="Feedback @dra.juliarfonseca" fill
+              className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              sizes="33vw" />
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 opacity-100 group-hover:opacity-0 transition-opacity">
+              <span className="text-[11px] font-bold tracking-[3px] uppercase text-[#4ade80]">Feedback</span>
+            </div>
+            <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <InstagramIcon size={28} />
+            </div>
+          </a>
+
+        </div>
+
       </div>
     </section>
   );

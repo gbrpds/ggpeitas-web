@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useStore } from '@/lib/store';
 import { useToast } from '@/components/ui/Toast';
 import { Product } from '@/types';
-import { ShoppingBag, ChevronLeft, ChevronRight, Star, Truck, Shield, RotateCcw, ChevronDown, ChevronUp, Clock } from 'lucide-react';
+import { ShoppingBag, ChevronLeft, ChevronRight, Star, Truck, Shield, Zap, ChevronDown, ChevronUp, Clock } from 'lucide-react';
 
 const ALL_SIZES = ['PP', 'P', 'M', 'G', 'GG', 'XGG'];
 
@@ -338,7 +338,7 @@ export function ProductPageClient({ product: p, related }: { product: Product; r
               {[
                 { icon: Truck, label: 'Frete Grátis', sub: 'Todo o Brasil' },
                 { icon: Shield, label: '100% Original', sub: 'Garantido' },
-                { icon: RotateCcw, label: 'Troca Fácil', sub: 'Fale conosco' },
+                { icon: Zap, label: 'Envio em 48h', sub: 'Após confirmação' },
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="bg-[#111] border border-white/[0.06] rounded-lg p-3 text-center">
                   <Icon size={18} className="text-[#F5C400] mx-auto mb-1.5" />
