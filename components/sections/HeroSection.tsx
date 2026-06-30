@@ -42,7 +42,7 @@ export function HeroSection() {
           src="/hero-bg.jpg"
           alt=""
           fill
-          className="object-cover object-center opacity-[0.07] mix-blend-luminosity"
+          className="object-cover object-center opacity-[0.12] mix-blend-luminosity"
           priority
           sizes="100vw"
         />
