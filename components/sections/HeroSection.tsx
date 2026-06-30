@@ -64,7 +64,7 @@ export function HeroSection() {
 
       {/* ── Conteúdo ── */}
       <div className="relative z-10 max-w-[1300px] mx-auto px-[5%] flex items-center h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-10 lg:gap-20 py-14 lg:py-20 w-full items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-10 lg:gap-20 py-14 lg:py-20 w-full items-center pl-0 lg:pl-[4%] xl:pl-[6%]">
 
           {/* ── ESQUERDA: slogan ── */}
           <div className="flex flex-col animate-fade-up">
@@ -114,125 +114,87 @@ export function HeroSection() {
               </a>
             </div>
 
-            {/* Promo strip */}
-            <div className="mt-7 flex items-center gap-3 text-[13px] flex-wrap">
-              <span className="text-white/25 line-through">R$ 229,90</span>
-              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">-17% OFF</span>
-              <span className="text-[#F5C400] font-bold">R$ 189,90</span>
-              <span className="text-[#008C3A] text-[11px]">· R$ 170,91 no PIX</span>
-            </div>
           </div>
 
-          {/* ── DIREITA: carrossel de destaques ── */}
-          <div className="hidden lg:flex flex-col gap-4">
-            {/* Label */}
+          {/* ── DIREITA: carrossel stories ── */}
+          <div className="hidden lg:flex flex-col gap-3">
+            {/* Label + setas */}
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-bold tracking-[4px] uppercase text-white/35 flex items-center gap-2">
                 <span className="w-4 h-px bg-[#F5C400]" /> Destaques
               </p>
-              {/* Nav arrows */}
               <div className="flex items-center gap-1">
-                <button
-                  onClick={() => goTo((c) => (c - 1 + featured.length) % featured.length)}
-                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:border-[#F5C400] hover:text-[#F5C400] transition-all"
-                >
+                <button onClick={() => goTo((c) => (c - 1 + featured.length) % featured.length)}
+                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:border-[#F5C400] hover:text-[#F5C400] transition-all">
                   <ChevronLeft size={14} />
                 </button>
-                <button
-                  onClick={() => goTo((c) => (c + 1) % featured.length)}
-                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:border-[#F5C400] hover:text-[#F5C400] transition-all"
-                >
+                <button onClick={() => goTo((c) => (c + 1) % featured.length)}
+                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:border-[#F5C400] hover:text-[#F5C400] transition-all">
                   <ChevronRight size={14} />
                 </button>
               </div>
             </div>
 
-            {/* Card principal */}
-            <div
-              onClick={() => p.active !== false && openModal(p)}
-              className={`relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all duration-300 cursor-pointer group ${
-                animating ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'
-              }`}
-              style={{ transition: 'opacity 0.2s, transform 0.2s', background: p.bg }}
-            >
-              {/* Imagem */}
-              <div className="aspect-[4/3] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent z-10" />
-                {p.images?.[0] ? (
-                  <Image
-                    key={p.id}
-                    src={p.images[0]}
-                    alt={p.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="440px"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[100px]">{p.icon}</span>
+            {/* Stories: card principal tall + thumbs lado a lado */}
+            <div className="flex gap-3 h-[52vh] max-h-[460px]">
+              {/* Card principal */}
+              <div
+                onClick={() => p.active !== false && openModal(p)}
+                className={`flex-[2] cursor-pointer group rounded-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all duration-200 flex flex-col ${
+                  animating ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'
+                }`}
+                style={{ background: p.bg }}
+              >
+                <div className="flex-1 relative overflow-hidden min-h-0">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent z-10" />
+                  {p.images?.[0] ? (
+                    <Image key={p.id} src={p.images[0]} alt={p.name} fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="320px" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-[100px]">{p.icon}</span>
+                    </div>
+                  )}
+                  <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                    {p.originalPrice && <span className="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm">-17% OFF</span>}
                   </div>
-                )}
-
-                {/* Badges */}
-                <div className="absolute top-3 left-3 z-20 flex gap-2">
-                  {p.originalPrice && (
-                    <span className="bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-sm">-17% OFF</span>
-                  )}
-                  {p.active === false && (
-                    <span className="bg-[#1a1a1a] border border-white/20 text-white/60 text-[9px] font-bold tracking-[1px] px-2.5 py-1 rounded-sm">EM BREVE</span>
-                  )}
+                  <div className="absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="bg-[#F5C400] text-black text-[9px] font-extrabold tracking-[2px] uppercase px-5 py-2 rounded-sm">VER PRODUTO</span>
+                  </div>
                 </div>
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="bg-[#F5C400] text-black text-[10px] font-extrabold tracking-[2px] uppercase px-6 py-2.5 rounded-sm">
-                    VER PRODUTO
-                  </span>
+                <div className="bg-[#0d0d0d] px-3.5 py-3 border-t-2 border-[#F5C400] flex-shrink-0">
+                  <p className="text-[8px] tracking-[2px] uppercase text-[#F5C400] font-bold mb-0.5">Modelo Jogador</p>
+                  <div className="flex items-center justify-between">
+                    <p className="font-display text-[15px] tracking-wide text-white">{p.name} <span className="text-white/35 text-[11px]">{p.label}</span></p>
+                    <p className="text-[16px] font-bold text-[#F5C400]">{p.price}</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Info */}
-              <div className="bg-[#0d0d0d] px-4 py-3.5 border-t-2 border-[#F5C400]">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[9px] tracking-[2px] uppercase text-[#F5C400] font-bold mb-0.5">Modelo Jogador · Importado</p>
-                    <p className="font-display text-[18px] tracking-wide text-white">
-                      {p.name} <span className="text-white/40 text-[13px]">{p.label}</span>
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    {p.originalPrice && <p className="text-[10px] text-white/25 line-through">{p.originalPrice}</p>}
-                    <p className="text-[20px] font-bold text-[#F5C400]">{p.price}</p>
-                  </div>
-                </div>
+              {/* Thumbs verticais */}
+              <div className="flex flex-col gap-2 flex-1">
+                {featured.map((fp, i) => (
+                  <button key={fp.id} onClick={() => goTo(i)}
+                    className={`flex-1 relative rounded-xl overflow-hidden border transition-all duration-300 ${
+                      i === current
+                        ? 'border-[#F5C400] ring-1 ring-[rgba(245,196,0,0.25)]'
+                        : 'border-white/[0.07] opacity-50 hover:opacity-80 hover:border-white/20'
+                    }`}
+                    style={{ background: fp.bg }}
+                  >
+                    {fp.images?.[0] && (
+                      <Image src={fp.images[0]} alt={fp.name} fill className="object-cover" sizes="140px" />
+                    )}
+                    {!fp.images?.[0] && (
+                      <div className="absolute inset-0 flex items-center justify-center text-2xl">{fp.icon}</div>
+                    )}
+                    <div className="absolute inset-0 bg-black/25" />
+                    <div className="absolute bottom-2 left-0 right-0 text-center">
+                      <span className="text-[8px] text-white/80 font-bold tracking-[1px] uppercase">{fp.label}</span>
+                    </div>
+                  </button>
+                ))}
               </div>
-            </div>
-
-            {/* Dots de navegação + thumbs */}
-            <div className="flex items-center gap-2">
-              {featured.map((fp, i) => (
-                <button
-                  key={fp.id}
-                  onClick={() => goTo(i)}
-                  className={`flex-1 relative rounded-lg overflow-hidden border transition-all duration-300 ${
-                    i === current
-                      ? 'border-[#F5C400] ring-1 ring-[rgba(245,196,0,0.3)]'
-                      : 'border-white/[0.08] opacity-50 hover:opacity-80'
-                  }`}
-                  style={{ height: '56px', background: fp.bg }}
-                >
-                  {fp.images?.[0] && (
-                    <Image src={fp.images[0]} alt={fp.name} fill className="object-cover" sizes="140px" />
-                  )}
-                  {!fp.images?.[0] && (
-                    <div className="absolute inset-0 flex items-center justify-center text-[20px]">{fp.icon}</div>
-                  )}
-                  <div className="absolute inset-0 bg-black/30" />
-                  <div className="absolute bottom-0.5 left-0 right-0 text-center">
-                    <span className="text-[8px] text-white/70 font-bold tracking-[1px] uppercase">{fp.label}</span>
-                  </div>
-                </button>
-              ))}
             </div>
           </div>
 
