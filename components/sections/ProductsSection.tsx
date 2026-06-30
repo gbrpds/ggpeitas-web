@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { products } from '@/lib/products';
 import { useStore } from '@/lib/store';
@@ -117,7 +118,13 @@ function ActiveCard({ p }: { p: Product }) {
 }
 
 export function ProductsSection() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<Tab>('todos');
+
+  useEffect(() => {
+    const cat = searchParams.get('cat') as Tab | null;
+    if (cat && tabs.some(t => t.key === cat)) setActiveTab(cat);
+  }, [searchParams]);
 
   const filtered = activeTab === 'todos'
     ? products

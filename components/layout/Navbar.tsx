@@ -7,9 +7,9 @@ import { useStore } from '@/lib/store';
 import { AccountMenu } from './AccountMenu';
 
 const categories = [
-  { href: '/#selecoes', label: 'Seleções', sub: 'Brasil, Argentina, França...' },
-  { href: '/#times-br', label: 'Times Brasileiros', sub: 'Grêmio, Inter e mais' },
-  { href: '/#retro', label: 'Retrôs', sub: '1970, 1994, 2002...' },
+  { href: '/catalogo?cat=selecoes', label: 'Seleções', sub: 'Brasil, Argentina, França...' },
+  { href: '/catalogo?cat=times-br', label: 'Times Brasileiros', sub: 'Grêmio, Inter e mais' },
+  { href: '/catalogo?cat=retro', label: 'Retrôs', sub: '1970, 1994, 2002...' },
 ];
 
 const topLinks = [

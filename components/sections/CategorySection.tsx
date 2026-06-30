@@ -1,6 +1,6 @@
 const categories = [
   {
-    href: '#selecoes',
+    href: '/catalogo?cat=selecoes',
     label: 'Seleções',
     sub: 'Brasil, Argentina, Portugal, Alemanha e mais',
     emoji: '🌍',
@@ -10,7 +10,7 @@ const categories = [
     count: 9,
   },
   {
-    href: '#times-br',
+    href: '/catalogo?cat=times-br',
     label: 'Times & Clubes',
     sub: 'Grêmio, Internacional, Real Madrid, Man. City',
     emoji: '⚽',
@@ -20,7 +20,7 @@ const categories = [
     count: 4,
   },
   {
-    href: '#retro',
+    href: '/catalogo?cat=retro',
     label: 'Retrôs',
     sub: 'Brasil 1970, 1994, 2002 e outras lendas',
     emoji: '⭐',
@@ -44,7 +44,6 @@ export function CategorySection() {
               className="group relative rounded-xl overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-6 flex flex-col gap-3 cursor-pointer"
               style={{ background: c.bg, borderColor: c.border }}
             >
-              {/* Glow ao hover */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{ background: `radial-gradient(ellipse at 50% 100%,${c.accent}15 0%,transparent 70%)` }} />
 

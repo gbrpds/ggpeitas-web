@@ -101,7 +101,7 @@ export function HeroSection() {
             {/* CTAs */}
             <div className="flex flex-wrap gap-3">
               <a
-                href="#loja"
+                href="/catalogo"
                 className="flex items-center gap-2 bg-[#F5C400] text-black py-3.5 px-7 font-display text-[16px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all"
               >
                 <ShoppingBag size={16} /> VER CATÁLOGO
