@@ -73,16 +73,19 @@ export function Navbar() {
               <button className={`flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold tracking-[2px] uppercase rounded-sm transition-all ${
                 megaOpen ? 'text-[#F5C400]' : 'text-white/60 hover:text-white'
               }`}>
-                Catálogo <ChevronDown size={11} className={`transition-transform ${megaOpen ? 'rotate-180 text-[#F5C400]' : ''}`} />
+                Catálogo <ChevronDown size={11} className={`transition-transform duration-200 ${megaOpen ? 'rotate-180 text-[#F5C400]' : ''}`} />
               </button>
+
+              {/* Ponte invisível para não fechar ao mover o mouse */}
+              {megaOpen && <div className="absolute top-full left-0 right-0 h-2" />}
 
               {/* Mega menu */}
               {megaOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[700px] bg-[#0d0d0d] border border-[rgba(245,196,0,0.12)] rounded-xl shadow-[0_32px_80px_rgba(0,0,0,0.8)] overflow-hidden">
+                <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[640px] bg-[#0f0f0f] border border-white/[0.1] rounded-xl shadow-[0_24px_60px_rgba(0,0,0,0.9)] overflow-hidden">
                   {/* Header */}
-                  <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
-                    <p className="text-[10px] font-bold tracking-[4px] uppercase text-white/30">Navegue pelo catálogo</p>
-                    <Link href="/catalogo" className="text-[10px] text-[#F5C400] hover:underline font-semibold">
+                  <div className="px-5 py-3 border-b border-white/[0.06] flex items-center justify-between">
+                    <p className="text-[9px] font-bold tracking-[4px] uppercase text-white/25">Catálogo</p>
+                    <Link href="/catalogo" onClick={() => setMegaOpen(false)} className="text-[10px] text-[#F5C400] hover:underline font-semibold">
                       Ver tudo →
                     </Link>
                   </div>
@@ -90,38 +93,36 @@ export function Navbar() {
                   {/* Grupos */}
                   <div className="grid grid-cols-3 divide-x divide-white/[0.05]">
                     {catalogGroups.map((g) => (
-                      <div key={g.key} className="p-5">
+                      <div key={g.key} className="p-4">
                         <Link
                           href={`/catalogo?cat=${g.key}`}
                           onClick={() => setMegaOpen(false)}
-                          className="flex items-center gap-2 mb-4 group"
+                          className="block text-[10px] font-bold tracking-[2.5px] uppercase text-white/40 hover:text-white mb-3 transition-colors"
                         >
-                          <span className="text-[18px]">{g.emoji}</span>
-                          <span className="text-[11px] font-bold tracking-[2px] uppercase group-hover:underline" style={{ color: g.accent }}>
-                            {g.label}
-                          </span>
+                          {g.label}
                         </Link>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col">
                           {g.items.map((p) => (
                             <Link
                               key={p.id}
                               href={`/produto/${p.slug}`}
                               onClick={() => setMegaOpen(false)}
-                              className="flex items-center gap-2.5 py-1.5 group"
+                              className="flex items-center gap-2 py-1.5 group"
                             >
-                              {/* Mini thumbnail */}
-                              <div className="w-8 h-8 rounded-md overflow-hidden flex-shrink-0 relative border border-white/[0.06]" style={{ background: p.bg }}>
+                              <div className="w-7 h-7 rounded overflow-hidden flex-shrink-0 relative border border-white/[0.06]" style={{ background: p.bg }}>
                                 {p.images?.[0] ? (
-                                  <Image src={p.images[0]} alt="" fill className="object-cover" sizes="32px" />
+                                  <Image src={p.images[0]} alt="" fill className="object-cover" sizes="28px" />
                                 ) : (
-                                  <div className="absolute inset-0 flex items-center justify-center text-[14px]">{p.icon}</div>
+                                  <div className="absolute inset-0 flex items-center justify-center text-[11px]">{p.icon}</div>
                                 )}
                               </div>
                               <div className="min-w-0">
-                                <p className="text-[11px] text-white/70 group-hover:text-white transition-colors truncate font-medium">
-                                  {p.name}
+                                <p className="text-[11px] text-white/55 group-hover:text-white transition-colors truncate leading-tight">
+                                  {p.name} {p.label}
                                 </p>
-                                <p className="text-[9px] text-white/30">{p.label}{p.active === false ? ' · Em Breve' : ''}</p>
+                                {p.active === false && (
+                                  <p className="text-[8px] text-white/25">Em Breve</p>
+                                )}
                               </div>
                             </Link>
                           ))}
