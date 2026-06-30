@@ -3,145 +3,120 @@ import Image from 'next/image';
 import { useStore } from '@/lib/store';
 import { products } from '@/lib/products';
 import { useOfferTimer } from '@/lib/useOfferTimer';
-import { Flame } from 'lucide-react';
+import { Flame, ShoppingBag, Star } from 'lucide-react';
 
 export function HeroSection() {
   const { openModal } = useStore();
   const timer = useOfferTimer();
 
   return (
-    <section id="home" className="h-[88vh] relative flex items-start pt-[68px] overflow-hidden">
-      {/* BG layers */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-radial-[ellipse_at_30%_50%] from-[rgba(0,50,20,0.6)] to-[#050505]" />
+    <section id="home" className="relative overflow-hidden" style={{ minHeight: '72vh', paddingTop: '64px' }}>
+      {/* BG */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[#050505]" />
+        <div className="absolute inset-0 bg-radial-[ellipse_at_20%_60%] from-[rgba(0,50,20,0.5)] to-transparent" />
+        <div className="absolute inset-0 bg-radial-[ellipse_at_80%_30%] from-[rgba(245,196,0,0.06)] to-transparent" />
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
-            backgroundImage: 'linear-gradient(rgba(245,196,0,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(245,196,0,.5) 1px,transparent 1px)',
-            backgroundSize: '72px 72px',
-            maskImage: 'radial-gradient(ellipse at 50% 50%,black 30%,transparent 80%)',
+            backgroundImage: 'linear-gradient(rgba(245,196,0,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(245,196,0,.6) 1px,transparent 1px)',
+            backgroundSize: '60px 60px',
           }}
         />
-        <div className="absolute w-[700px] h-[700px] rounded-full -top-40 -left-24 animate-pulse-glow"
-          style={{ background: 'radial-gradient(circle,rgba(0,140,58,.22) 0%,transparent 65%)' }} />
-        <div className="absolute w-[500px] h-[500px] rounded-full bottom-0 right-[5%] animate-pulse-glow"
-          style={{ background: 'radial-gradient(circle,rgba(245,196,0,.1) 0%,transparent 65%)', animationDelay: '1s' }} />
       </div>
 
-      {/* Layout grid — padding uniforme em todos os lados */}
-      <div className="relative z-10 w-full h-full grid grid-cols-1 lg:grid-cols-2 px-[5%] lg:pl-[8%] xl:pl-[10%] pr-[4%] py-8">
+      <div className="relative z-10 max-w-[1300px] mx-auto px-[5%] h-full flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 py-12 lg:py-16 w-full items-center">
 
-        {/* ── ESQUERDA: slogan + botões ── */}
-        <div className="flex flex-col justify-center animate-fade-up">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-3 bg-[rgba(245,196,0,0.08)] border border-[rgba(245,196,0,0.25)] px-4 py-1.5 rounded-sm mb-4 w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F5C400] animate-pulse" />
-            <span className="text-[10px] font-bold tracking-[3px] uppercase text-[#F5C400]">
-              Nova Coleção · Brasil 2026
-            </span>
-          </div>
-
-          {/* Title */}
-          <div className="font-display leading-[0.88] tracking-[2px] mb-4" style={{ fontSize: 'clamp(56px,7.5vw,120px)' }}>
-            <div className="text-white">FUTEBOL</div>
-            <div className="text-[#F5C400]" style={{ textShadow: '0 0 60px rgba(245,196,0,0.3)' }}>ESTILO</div>
-            <div className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.18)' }}>PRESENÇA</div>
-          </div>
-
-          {/* Slogan */}
-          <div className="flex items-center gap-3 text-[12px] tracking-[4px] uppercase text-white/40 mb-6">
-            <span className="w-8 h-px bg-[#008C3A]" />
-            Futebol, estilo e presença.
-          </div>
-
-          {/* CTAs */}
-          <div className="flex gap-3 mb-6 max-w-[460px]">
-            <a href="#loja" className="flex-1 text-center bg-[#F5C400] text-black py-3.5 font-display text-[17px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all">
-              COMPRAR AGORA
-            </a>
-            <button
-              onClick={() => openModal(products[0])}
-              className="flex-1 bg-transparent text-white py-3.5 font-display text-[17px] tracking-[2px] border border-white/20 rounded-sm hover:border-white hover:bg-white/[0.04] transition-all"
-            >
-              VER BRASIL 2026
-            </button>
-          </div>
-
-          {/* Stats */}
-          <div className="hidden md:flex gap-8">
-            {[['Qualidade', 'Premium'], ['10+', 'Seleções'], ['Frete', 'Grátis']].map(([n, l]) => (
-              <div key={l}>
-                <div className="font-display text-[22px] text-[#F5C400] leading-none">{n}</div>
-                <div className="text-[10px] tracking-[2px] uppercase text-white/40 mt-1">{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── DIREITA: timer + cards ── */}
-        <div className="hidden lg:flex flex-col pl-6 gap-3 h-full">
-
-          {/* Banner oferta — sempre visível */}
-          <div className={`flex items-center justify-between backdrop-blur-sm border rounded-xl px-4 py-2.5 flex-shrink-0 ${
-            timer.expired
-              ? 'bg-white/[0.03] border-white/10'
-              : 'bg-[rgba(0,0,0,0.7)] border-[rgba(245,196,0,0.25)]'
-          }`}>
-            <div className="flex items-center gap-2">
-              <Flame size={14} className={`flex-shrink-0 ${timer.expired ? 'text-white/20' : 'text-[#F5C400] animate-pulse'}`} />
-              <div>
-                <p className={`text-[9px] font-bold tracking-[2px] uppercase ${timer.expired ? 'text-white/30' : 'text-[#F5C400]'}`}>
-                  {timer.expired ? 'Oferta encerrada' : 'Oferta por tempo limitado'}
-                </p>
-                <p className="text-[10px] text-white/40">
-                  DE <span className="line-through text-white/30">R$ 229,90</span>
-                  <span className="text-white/40 mx-1">→</span>
-                  POR <span className={`font-bold ${timer.expired ? 'text-white/40' : 'text-[#F5C400]'}`}>R$ 189,90</span>
-                </p>
-              </div>
-            </div>
+          {/* ── ESQUERDA ── */}
+          <div className="flex flex-col animate-fade-up">
+            {/* Badge oferta */}
             {!timer.expired && (
-              <div className="flex items-center gap-1 font-mono font-bold flex-shrink-0">
-                {[timer.h, timer.m, timer.s].map((val, i) => (
-                  <span key={i} className="flex items-center gap-1">
-                    <span className="bg-[#F5C400] text-black px-2 py-0.5 rounded-sm min-w-[30px] text-center text-[13px]">{val}</span>
-                    {i < 2 && <span className="text-[#F5C400] text-[12px]">:</span>}
-                  </span>
-                ))}
+              <div className="inline-flex items-center gap-2.5 bg-[rgba(245,196,0,0.1)] border border-[rgba(245,196,0,0.3)] px-4 py-2 rounded-sm mb-5 w-fit">
+                <Flame size={13} className="text-[#F5C400] animate-pulse flex-shrink-0" />
+                <span className="text-[10px] font-bold tracking-[3px] uppercase text-[#F5C400]">
+                  Oferta termina em: <span className="font-mono">{timer.h}:{timer.m}:{timer.s}</span>
+                </span>
               </div>
             )}
+
+            <h1 className="font-display leading-[0.9] tracking-[2px] mb-4" style={{ fontSize: 'clamp(48px,7vw,100px)' }}>
+              <span className="text-white">CAMISAS</span><br />
+              <span className="text-[#F5C400]" style={{ textShadow: '0 0 40px rgba(245,196,0,0.25)' }}>PREMIUM</span><br />
+              <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>IMPORTADAS</span>
+            </h1>
+
+            <p className="text-white/50 text-[14px] leading-relaxed mb-6 max-w-[420px]">
+              Modelo jogador original, embalagem premium e frete grátis para todo o Brasil.
+              A camisa que você quer, do jeito que merece.
+            </p>
+
+            {/* Trust indicators */}
+            <div className="flex items-center gap-5 mb-7 flex-wrap">
+              {[['⭐', '100% Original'], ['📦', 'Frete Grátis'], ['💳', 'Até 12x']].map(([icon, txt]) => (
+                <div key={txt} className="flex items-center gap-1.5 text-[11px] text-white/40 font-medium">
+                  <span>{icon}</span> {txt}
+                </div>
+              ))}
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="#loja"
+                className="flex items-center gap-2 bg-[#F5C400] text-black py-3.5 px-7 font-display text-[16px] tracking-[2px] rounded-sm hover:bg-[#D9A300] hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(245,196,0,0.25)] transition-all"
+              >
+                <ShoppingBag size={16} /> VER CATÁLOGO
+              </a>
+              <button
+                onClick={() => openModal(products[0])}
+                className="flex items-center gap-2 bg-transparent text-white py-3.5 px-7 font-display text-[16px] tracking-[2px] border border-white/20 rounded-sm hover:border-white hover:bg-white/[0.04] transition-all"
+              >
+                BRASIL 2026
+              </button>
+            </div>
+
+            {/* Promo strip */}
+            <div className="mt-7 flex items-center gap-3 text-[13px] flex-wrap">
+              <span className="text-white/25 line-through">R$ 229,90</span>
+              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">-17% OFF</span>
+              <span className="text-[#F5C400] font-bold">R$ 189,90</span>
+              <span className="text-[#008C3A] text-[11px]">· R$ 170,91 no PIX</span>
+            </div>
           </div>
 
-          {/* Cards — flex-1 preenche o espaço restante */}
-          <div className="flex gap-3 flex-1 min-h-0">
+          {/* ── DIREITA: cards das 2 camisas ── */}
+          <div className="hidden lg:flex gap-4 h-[52vh] max-h-[480px]">
             {[
-              { p: products[0], color: 'linear-gradient(170deg,#00b050 0%,#008C3A 45%,#004d20 100%)', badge: 'HOME', badgeColor: 'bg-[#1a3a8f] text-white' },
-              { p: products[1], color: 'linear-gradient(170deg,#0a0f2e 0%,#001a5e 50%,#000d3a 100%)', badge: 'AWAY', badgeColor: 'bg-[#008C3A] text-white' },
-            ].map(({ p, color, badge, badgeColor }) => (
-              <div key={p.id} onClick={() => openModal(p)} className="flex-1 cursor-pointer group rounded-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.3)] transition-all hover:-translate-y-1 flex flex-col min-h-0">
-                {/* Imagem ocupa espaço disponível */}
-                <div className="flex-1 relative overflow-hidden min-h-0" style={{ background: color }}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
-                  {p.images && p.images[0] ? (
-                    <Image src={p.images[0]} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="320px" />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-[80px]">{p.icon}</span>
-                    </div>
+              { p: products[0], bg: 'linear-gradient(160deg,#005020 0%,#002810 100%)', badge: 'HOME', badgeClass: 'bg-[#1a3a8f] text-white' },
+              { p: products[1], bg: 'linear-gradient(160deg,#001040 0%,#000820 100%)', badge: 'AWAY', badgeClass: 'bg-[#008C3A] text-white' },
+            ].map(({ p, bg, badge, badgeClass }) => (
+              <div
+                key={p.id}
+                onClick={() => openModal(p)}
+                className="flex-1 cursor-pointer group rounded-xl overflow-hidden border border-white/[0.08] hover:border-[rgba(245,196,0,0.35)] transition-all hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(0,0,0,0.6)] flex flex-col"
+              >
+                <div className="flex-1 relative overflow-hidden" style={{ background: bg }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent" />
+                  {p.images?.[0] && (
+                    <Image src={p.images[0]} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="280px" />
                   )}
-                  <span className={`absolute top-3 left-3 ${badgeColor} text-[11px] font-extrabold tracking-[2px] uppercase px-3 py-1.5 rounded-sm`}>
+                  <span className={`absolute top-3 left-3 ${badgeClass} text-[10px] font-extrabold tracking-[2px] uppercase px-2.5 py-1 rounded-sm`}>
                     {badge}
                   </span>
-                  <div className="absolute bottom-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">-17%</div>
+                  <div className="absolute top-3 right-3 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm">
+                    -17%
+                  </div>
                 </div>
-                {/* Info */}
-                <div className="bg-[#0f0f0f] px-4 py-3 border-t-2 border-[#F5C400] flex-shrink-0">
-                  <div className="text-[9px] tracking-[2px] uppercase text-[#F5C400] font-bold mb-0.5">Modelo Jogador</div>
-                  <div className="font-display text-[16px] tracking-[1px] leading-tight text-white">{p.name} <span className="text-white/40 text-[13px]">{p.label}</span></div>
-                  <div className="flex items-center justify-between mt-2">
+                <div className="bg-[#0d0d0d] px-3.5 py-3 border-t-2 border-[#F5C400] flex-shrink-0">
+                  <div className="flex items-center gap-0.5 mb-0.5">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={9} className="fill-[#F5C400] text-[#F5C400]" />)}
+                  </div>
+                  <div className="font-display text-[14px] tracking-wide text-white leading-tight">{p.name}</div>
+                  <div className="flex items-center justify-between mt-1.5">
                     <div>
-                      <div className="text-[9px] text-white/30 line-through">R$ 229,90</div>
-                      <div className="text-[16px] font-bold text-[#F5C400]">{p.price}</div>
+                      <div className="text-[9px] text-white/25 line-through">R$ 229,90</div>
+                      <div className="text-[15px] font-bold text-[#F5C400]">{p.price}</div>
                     </div>
                     <button className="bg-[#F5C400] text-black text-[9px] font-bold tracking-[2px] uppercase px-3 py-1.5 rounded-sm hover:bg-[#D9A300] transition-colors">
                       VER
@@ -151,8 +126,8 @@ export function HeroSection() {
               </div>
             ))}
           </div>
-        </div>
 
+        </div>
       </div>
     </section>
   );

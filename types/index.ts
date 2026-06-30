@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   label: string;
   cat: string;
-  badge: 'novo' | 'jogador' | 'esgotado';
+  badge: 'novo' | 'jogador' | 'esgotado' | 'retro';
   price: string;
   priceNum: number;
   originalPrice?: string;
@@ -12,9 +12,10 @@ export interface Product {
   images?: string[];
   desc: string;
   filter: 'selecao' | 'clube';
+  category: 'selecoes' | 'times-br' | 'retro'; // categoria principal da loja
   specs?: { key: string; val: string }[];
-  active?: boolean; // false = em breve, não aparece na vitrine
-  stock?: Record<string, number>; // tamanho → qtd disponível
+  active?: boolean;   // false = em breve
+  stock?: Record<string, number>;
 }
 
 export interface CartItem extends Product {
