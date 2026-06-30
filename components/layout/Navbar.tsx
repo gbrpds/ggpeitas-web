@@ -93,16 +93,17 @@ export function Navbar() {
                   {/* Grupos */}
                   <div className="grid grid-cols-3 divide-x divide-white/[0.05]">
                     {catalogGroups.map((g) => (
-                      <div key={g.key} className="p-4">
+                      <div key={g.key} className="p-4 flex flex-col">
                         <Link
                           href={`/catalogo?cat=${g.key}`}
                           onClick={() => setMegaOpen(false)}
-                          className="block text-[10px] font-bold tracking-[2.5px] uppercase text-white/40 hover:text-white mb-3 transition-colors"
+                          className="block text-[10px] font-bold tracking-[2.5px] uppercase mb-3 transition-opacity hover:opacity-70"
+                          style={{ color: g.accent }}
                         >
                           {g.label}
                         </Link>
-                        <div className="flex flex-col">
-                          {g.items.map((p) => (
+                        <div className="flex flex-col flex-1">
+                          {g.items.slice(0, 4).map((p) => (
                             <Link
                               key={p.id}
                               href={`/produto/${p.slug}`}
@@ -127,6 +128,16 @@ export function Navbar() {
                             </Link>
                           ))}
                         </div>
+                        {g.items.length > 4 && (
+                          <Link
+                            href={`/catalogo?cat=${g.key}`}
+                            onClick={() => setMegaOpen(false)}
+                            className="mt-3 text-[9px] font-bold tracking-[2px] uppercase border-t border-white/[0.06] pt-3 transition-opacity hover:opacity-70"
+                            style={{ color: g.accent }}
+                          >
+                            Ver mais {g.items.length - 4} →
+                          </Link>
+                        )}
                       </div>
                     ))}
                   </div>
